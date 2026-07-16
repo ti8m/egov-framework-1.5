@@ -1,0 +1,29 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+ij_continuation_indent_size = 8
+ij_formatter_off_tag = @formatter:off
+ij_formatter_on_tag = @formatter:on
+ij_formatter_tags_enabled = true
+ij_smart_tabs = false
+ij_visual_guides =
+ij_wrap_on_typing = false
+indent_size = 4
+indent_style = space
+insert_final_newline = false
+max_line_length = off
+tab_width = 4
+
+[*.java]
+ij_java_class_count_to_use_import_on_demand = 999
+ij_java_for_brace_force = always
+ij_java_if_brace_force = always
+ij_java_names_count_to_use_import_on_demand = 999
+ij_java_while_brace_force = never
+ij_java_wrap_first_method_in_call_chain = true
+ij_java_method_call_chain_wrap = on_every_item
+
+[*.{json,yaml,yml,xml}]
+indent_size = 2

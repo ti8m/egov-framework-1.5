@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:17.4:///integration-tests-db
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        auto_quote_keyword: true
+  flyway:
+    enabled: false
+
+egov:
+  persistence:
+    database:
+      type: POSTGRESQL
+      naming:
+        style: SNAKE_CASE

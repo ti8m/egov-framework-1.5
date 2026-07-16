@@ -1,0 +1,25 @@
+server:
+  port: 8082
+
+# zookeeper handling
+egov:
+  service:
+    discovery:
+      activated: false
+  persistence:
+    database:
+      type: SQLSERVER
+      naming:
+        style: SNAKE_CASE
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MSSQLServer
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false

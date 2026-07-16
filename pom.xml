@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.14</version>
+  </parent>
+
+  <groupId>ch.ti8m.egov</groupId>
+  <artifactId>e-gov-framework-bundle</artifactId>
+  <version>1.9.0</version>
+  <packaging>pom</packaging>
+
+  <name>eGovFramework</name>
+  <description>eGovFramework</description>
+
+  <modules>
+    <module>e-gov-bom</module>
+    <module>e-gov-framework</module>
+    <module>e-gov-ai-rule-generation</module>
+    <module>e-gov-mdm</module>
+    <module>e-gov-mdm-api</module>
+    <module>e-gov-framework-demo</module>
+    <module>e-gov-luid</module>
+  </modules>
+
+  <properties>
+    <!-- <java.version/> is recognized by spring-boot-maven plugin, only. -->
+    <java.version>21</java.version>
+    <framework-ruleset-generator.version>1.0-SNAPSHOT</framework-ruleset-generator.version>
+    <!-- Sets the maven java version. IntelliJ recognizes its version from this setting. -->
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>bin_ti8m</id>
+      <name>egov-framework_mvn</name>
+      <url>https://bin.ti8m.ch/artifactory/egov-framework_mvn/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+      <id>bin_ti8m</id>
+      <name>egov-framework_mvn</name>
+      <url>https://bin.ti8m.ch/artifactory/egov-framework_mvn/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <distributionManagement>
+    <repository>
+      <id>bin_ti8m</id>
+      <name>egov-framework_mvn-release-local</name>
+      <url>https://bin.ti8m.ch/artifactory/egov-framework_mvn-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>bin_ti8m</id>
+      <name>egov-framework_mvn-release-local</name>
+      <url>https://bin.ti8m.ch/artifactory/egov-framework_mvn-release-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>

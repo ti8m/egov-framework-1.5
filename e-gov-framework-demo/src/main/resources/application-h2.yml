@@ -1,0 +1,29 @@
+server:
+  servlet:
+    context-path: /egov
+  port: 8081
+
+spring:
+  application:
+    name: egov
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MSSQLServer
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  flyway:
+    enabled: false
+
+egov:
+  service:
+    discovery:
+      activated: false
+  persistence:
+    database:
+      type: SQLSERVER
+      naming:
+        style: SNAKE_CASE

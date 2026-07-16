@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:tc:sqlserver:latest:///mssql-integration-tests-db
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        auto_quote_keyword: true
+  flyway:
+    enabled: false
+
+egov:
+  persistence:
+    database:
+      type: SQLSERVER
+      naming:
+        style: CAMEL_CASE

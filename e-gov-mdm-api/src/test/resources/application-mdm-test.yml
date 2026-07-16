@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: egov
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        auto_quote_keyword: true
+  datasource:
+    url: jdbc:tc:postgresql:17.4:///mdm-tests-db
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  flyway:
+    enabled: false
+egov:
+  service:
+    discovery:
+      activated: false
+  persistence:
+    database:
+      type: POSTGRESQL
+      naming:
+        style: SNAKE_CASE
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        orm:
+#          jdbc:
+#            bind: TRACE

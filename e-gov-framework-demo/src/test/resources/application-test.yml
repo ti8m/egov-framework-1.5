@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: egovframework
+  datasource:
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=VALUE;MODE=MSSQLServer
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+egov:
+  service:
+    discovery:
+      activated: false
+  persistence:
+    database:
+      type: postgresql

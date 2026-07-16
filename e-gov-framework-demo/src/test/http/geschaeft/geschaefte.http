@@ -1,0 +1,163 @@
+###
+POST {{baseUrl}}/api/gescheaft/geschaefte
+Content-Type: application/json
+
+{
+    "geschaeftNummer": "",
+    "einreichungDatum": "",
+    "uebernahmeDatum": "",
+    "urheber": {
+        "id": -1,
+        "name": "",
+        "vorname": ""
+    },
+    "behandelndePersonen": []
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 201, "Response status is " + response.status)
+    })
+%}
+
+###
+POST {{baseUrl}}/validation/v1/modifications/rules?class=ch.ti8m.egov.demo.Geschaeft.class
+Content-Type: application/text
+
+Die Geschäftsnummer muss mindestens 1 Zeichen haben, aber nicht mehr als 20. Ausserdem darf sie nur aus Grossbuchstaben bestehen.
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 200, "Response status is " + response.status)
+        client.global.set("rule", JSON.stringify(response.body))
+    })
+%}
+
+###
+POST {{baseUrl}}/validation/v1/modifications/rules/apply?class=ch.ti8m.egov.demo.Geschaeft.class&field=geschaeftNummer
+Content-Type: application/json
+
+{
+"rule": {{ rule }}
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 200, "Response status is " + response.status)
+    })
+%}
+
+###
+POST {{baseUrl}}/api/gescheaft/geschaefte
+Content-Type: application/json
+
+{
+    "geschaeftNummer": "HASLLOASDF",
+    "einreichungDatum": "",
+    "uebernahmeDatum": "",
+    "urheber": {
+        "id": -1,
+        "name": "",
+        "vorname": ""
+    },
+    "behandelndePersonen": []
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 201, "Response status is " + response.status)
+    })
+%}
+
+###
+POST {{baseUrl}}/api/gescheaft/geschaefte
+Content-Type: application/json
+
+{
+    "geschaeftNummer": "asdHIOAJHSDasd",
+    "einreichungDatum": "",
+    "uebernahmeDatum": "",
+    "urheber": {
+        "id": -1,
+        "name": "",
+        "vorname": ""
+    },
+    "behandelndePersonen": []
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 400, "Response status is " + response.status)
+    })
+%}
+
+###
+POST {{baseUrl}}/validation/v1/modifications/rules?class=ch.ti8m.egov.demo.Geschaeft.class
+Content-Type: application/text
+
+Die ID des Urhebers muss grösser sein als null.
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 200, "Response status is " + response.status)
+        client.global.set("rule", JSON.stringify(response.body))
+    })
+%}
+
+###
+POST {{baseUrl}}/validation/v1/modifications/rules/apply?class=ch.ti8m.egov.demo.Geschaeft.class&field=urheber.id
+Content-Type: application/json
+
+{
+"rule": {{ rule }}
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 200, "Response status is " + response.status)
+    })
+%}
+
+###
+POST {{baseUrl}}/api/gescheaft/geschaefte
+Content-Type: application/json
+
+{
+    "geschaeftNummer": "ASDF",
+    "einreichungDatum": "",
+    "uebernahmeDatum": "",
+    "urheber": {
+        "id": 16,
+        "name": "",
+        "vorname": ""
+    },
+    "behandelndePersonen": []
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 201, "Response status is " + response.status)
+    })
+%}
+
+###
+POST {{baseUrl}}/api/gescheaft/geschaefte
+Content-Type: application/json
+
+{
+    "geschaeftNummer": "ASDF",
+    "einreichungDatum": "",
+    "uebernahmeDatum": "",
+    "urheber": {
+        "id": -1,
+        "name": "",
+        "vorname": ""
+    },
+    "behandelndePersonen": []
+}
+
+> {%
+    client.test("Create a new book", function () {
+        client.assert(response.status === 400, "Response status is " + response.status)
+    })
+%}

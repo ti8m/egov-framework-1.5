@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: e-gov-ai-rule-generation
+  ai:
+    azure:
+      openai:
+        api-key: ${AZURE_OPEN_API_KEY}
+        endpoint: https://openai-search-minipoc.openai.azure.com/
+        chat:
+          options:
+            deployment-name: gpt-4o
+            #temperature: 0.7

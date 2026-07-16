@@ -1,0 +1,9 @@
+logging:
+  level:
+    ch:
+      ti8m:
+        egov:
+          framework:
+            validation:
+              engine:
+                FieldValueExtractorComponent: debug

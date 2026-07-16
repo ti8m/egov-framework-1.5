@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:17.4:///flyway-generate-test-db
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: update
+              create-target: src/main/resources/db/egov/postgres/VX__give_new_name.sql
+  flyway:
+    enabled: true
+    locations: classpath:/db/egov/postgres
+    baseline-version: 0
+    baseline-on-migrate: true
+
+egov:
+  persistence:
+    database:
+      type: POSTGRESQL
+      naming:
+        style: SNAKE_CASE

@@ -1,0 +1,62 @@
+{
+  "branches": [
+    "+([0-9])?(.{+([0-9]),x}).x",
+    "main",
+    {
+      "name": "develop",
+      "prerelease": true
+    }
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "issuePrefixes": [
+            "TIMSBB"
+          ],
+          "issueUrlFormat": "https://jira.ti8m.ch/browse/{{prefix}}{{id}}"
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@terrestris/maven-semantic-release",
+      {
+        "settingsPath": "/root/.m2/settings.xml",
+        "mavenTarget": "deploy",
+        "mavenArgs": "-DprocessAllModules"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "mvn versions:set -DnewVersion=${nextRelease.version} -DprocessAllModules -DupdateChildModules=true -DgenerateBackupPoms=false && mvn clean install -DskipTests",
+        "publishCmd": "chmod +x ./scripts/push-to-confluence.sh && ./scripts/push-to-confluence.sh \"${nextRelease.version}\" \"${nextRelease.notes}\""
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "**/pom.xml",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "@semantic-release/gitlab"
+  ]
+}

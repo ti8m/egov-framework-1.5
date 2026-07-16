@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:17.4:///flyway-validate-test-db
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    baseline-version: 0
+    baseline-on-migrate: true
+    enabled: true
+    locations: classpath:/db/egov/postgres
+    clean-disabled: false
+
+egov:
+  persistence:
+    database:
+      type: POSTGRESQL
+      naming:
+        style: SNAKE_CASE

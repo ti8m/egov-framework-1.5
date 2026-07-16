@@ -1,0 +1,36 @@
+server:
+  servlet:
+    context-path: /egov
+  port: 8081
+
+spring:
+  application:
+    name: egov
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        auto_quote_keyword: true
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/egov-db
+    username: egov
+    password: secret
+  flyway:
+    enabled: false
+
+egov:
+  service:
+    discovery:
+      activated: false
+  persistence:
+    database:
+      type: POSTGRESQL
+      naming:
+        style: SNAKE_CASE

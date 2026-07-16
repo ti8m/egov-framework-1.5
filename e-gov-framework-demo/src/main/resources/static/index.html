@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html lang="de">
+<head>
+    <title>AI-Enabled Demo Project</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <script src="script.js"></script>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<h3>Geschäft erstellen</h3>
+<table>
+    <tr>
+        <th>Feld</th>
+        <th>Eingabe</th>
+        <th></th>
+        <th>Beschreibung der neuen Regel</th>
+    </tr>
+    <tr>
+        <td><label for="geschaeftNummer">Geschäftsnummer</label></td>
+        <td><input id="geschaeftNummer" type="text"></td>
+        <td style="padding-left: 50px"></td>
+        <td><textarea cols="40" id="geschaeftNummerRule" placeholder="Die Geschäftsnummer darf nur aus Grossbuchstaben bestehen und muss mehr als ein Zeichen haben."
+                      rows="4"></textarea>
+        </td>
+        <td>
+            <button onclick="createRule('geschaeftNummerRule', 'geschaeftNummer')">Regel erfassen</button>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="einreichungDatum">Einreichungsdatum</label></td>
+        <td><input id="einreichungDatum" type="date"></td>
+        <td style="padding-left: 50px"></td>
+        <td><textarea cols="40" id="einreichungDatumRule" placeholder="Das Einreichungsdatum muss vor 2025-03-01 sein."
+                      rows="4"></textarea></td>
+        <td>
+            <button onclick="createRule('einreichungDatumRule', 'einreichungDatum')">Regel erfassen</button>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="uebernahmeDatum">Übernahmedatum</label></td>
+        <td><input id="uebernahmeDatum" type="date"></td>
+        <td style="padding-left: 50px"></td>
+        <td><textarea cols="40" id="uebernahmeDatumRule" placeholder="Das Übernahmedatum muss nach dem Einreichungsdatum sein."
+                      rows="4"></textarea></td>
+        <td>
+            <button onclick="createRule('uebernahmeDatumRule', 'uebernahmeDatum')">Regel erfassen</button>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="urheberId"></label>Urheber ID</td>
+        <td><input id="urheberId" type="number"></td>
+        <td style="padding-left: 50px"></td>
+        <td><textarea cols="40" id="urheberIdRule" placeholder="Die UrheberID muss grösser sein als 0."
+                      rows="4"></textarea></td>
+        <td>
+            <button onclick="createRule('urheberIdRule', 'urheber.id')">Regel erfassen</button>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="urheberVorname">Vorname Urheber</label></td>
+        <td><input id="urheberVorname" type="text"></td>
+        <td style="padding-left: 50px"></td>
+        <td><textarea cols="40" id="urheberVornameRule" placeholder="Der Vorname muss mehr als ein Zeichen haben."
+                      rows="4"></textarea></td>
+        <td>
+            <button onclick="createRule('urheberVornameRule', 'urheber.vorname')">Regel erfassen</button>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="urheberNachname">Nachname Urheber</label></td>
+        <td><input id="urheberNachname" type="text"></td>
+        <td style="padding-left: 50px"></td>
+        <td><textarea cols="40" id="urheberNachnameRule" placeholder="Der Nachname muss mit einem Grossbuchstaben beginnen. Danach dürfen nur noch Kleinbuchstaben folgen. Er muss ausserdem anders sein als der Vorname."
+                      rows="4"></textarea>
+        </td>
+        <td>
+            <button onclick="createRule('urheberNachnameRule', 'urheber.name')">Regel erfassen</button>
+        </td>
+    </tr>
+</table>
+<button onclick="validateInput()">Input validieren</button>
+<div id="overlay" style="display: none">
+    <span class="loader"></span>
+</div>
+</body>
+</html>

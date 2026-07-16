@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          schema_filter_provider: ch.ti8m.egov.framework.persistence.base.EgovSchemaFilterProvider
+
+logging:
+  level:
+    ch:
+      ti8m:
+        egov:
+          framework:
+            exceptionhandling:
+              exceptionhandlers: DEBUG
