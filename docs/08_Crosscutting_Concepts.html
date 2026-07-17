@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>8. Querschnittliche Konzepte</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#querschnittliche-konzepte"
+id="toc-querschnittliche-konzepte"><span
+class="toc-section-number">8</span> Querschnittliche Konzepte</a>
+<ul>
+<li><a href="#sicherheit-und-autorisierung"
+id="toc-sicherheit-und-autorisierung"><span
+class="toc-section-number">8.1</span> Sicherheit und Autorisierung</a>
+<ul>
+<li><a href="#authentifizierung-vorgelagert"
+id="toc-authentifizierung-vorgelagert"><span
+class="toc-section-number">8.1.1</span> Authentifizierung
+(vorgelagert)</a></li>
+<li><a href="#row-based-security" id="toc-row-based-security"><span
+class="toc-section-number">8.1.2</span> Row-based Security</a></li>
+</ul></li>
+<li><a href="#command-pattern-und-audit-trail"
+id="toc-command-pattern-und-audit-trail"><span
+class="toc-section-number">8.2</span> Command-Pattern und
+Audit-Trail</a>
+<ul>
+<li><a href="#status-lifecycle" id="toc-status-lifecycle"><span
+class="toc-section-number">8.2.1</span> Status-Lifecycle</a></li>
+<li><a href="#executionplan" id="toc-executionplan"><span
+class="toc-section-number">8.2.2</span> ExecutionPlan</a></li>
+<li><a href="#executor-varianten" id="toc-executor-varianten"><span
+class="toc-section-number">8.2.3</span> Executor-Varianten</a></li>
+</ul></li>
+<li><a href="#fehlerbehandlung" id="toc-fehlerbehandlung"><span
+class="toc-section-number">8.3</span> Fehlerbehandlung</a>
+<ul>
+<li><a href="#exception-hierarchie" id="toc-exception-hierarchie"><span
+class="toc-section-number">8.3.1</span> Exception-Hierarchie</a></li>
+<li><a href="#einheitliche-fehlerantwort"
+id="toc-einheitliche-fehlerantwort"><span
+class="toc-section-number">8.3.2</span> Einheitliche
+Fehlerantwort</a></li>
+<li><a href="#fehler-code-schema" id="toc-fehler-code-schema"><span
+class="toc-section-number">8.3.3</span> Fehler-Code-Schema</a></li>
+</ul></li>
+<li><a href="#persistenz" id="toc-persistenz"><span
+class="toc-section-number">8.4</span> Persistenz</a>
+<ul>
+<li><a href="#repository-pattern" id="toc-repository-pattern"><span
+class="toc-section-number">8.4.1</span> Repository-Pattern</a></li>
+<li><a href="#filter-dsl" id="toc-filter-dsl"><span
+class="toc-section-number">8.4.2</span> Filter-DSL</a></li>
+<li><a href="#multi-datenbankunterstützung"
+id="toc-multi-datenbankunterstützung"><span
+class="toc-section-number">8.4.3</span>
+Multi-Datenbankunterstützung</a></li>
+<li><a href="#datenbankmigrationen" id="toc-datenbankmigrationen"><span
+class="toc-section-number">8.4.4</span> Datenbankmigrationen</a></li>
+</ul></li>
+<li><a href="#konfiguration" id="toc-konfiguration"><span
+class="toc-section-number">8.5</span> Konfiguration</a></li>
+<li><a href="#logging" id="toc-logging"><span
+class="toc-section-number">8.6</span> Logging</a></li>
+<li><a href="#internationalisierung"
+id="toc-internationalisierung"><span
+class="toc-section-number">8.7</span> Internationalisierung</a>
+<ul>
+<li><a href="#datenstruktur" id="toc-datenstruktur"><span
+class="toc-section-number">8.7.1</span> Datenstruktur</a></li>
+<li><a href="#sprachauswahl" id="toc-sprachauswahl"><span
+class="toc-section-number">8.7.2</span> Sprachauswahl</a></li>
+</ul></li>
+<li><a href="#id-generierung-luid" id="toc-id-generierung-luid"><span
+class="toc-section-number">8.8</span> ID-Generierung (LUID)</a>
+<ul>
+<li><a href="#algorithmus-luidgenerator"
+id="toc-algorithmus-luidgenerator"><span
+class="toc-section-number">8.8.1</span> Algorithmus
+(LUIDGenerator)</a></li>
+</ul></li>
+<li><a href="#testbarkeit" id="toc-testbarkeit"><span
+class="toc-section-number">8.9</span> Testbarkeit</a>
+<ul>
+<li><a href="#test-pyramide" id="toc-test-pyramide"><span
+class="toc-section-number">8.9.1</span> Test-Pyramide</a></li>
+<li><a href="#testcontainers-konfiguration"
+id="toc-testcontainers-konfiguration"><span
+class="toc-section-number">8.9.2</span>
+Testcontainers-Konfiguration</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="8" id="querschnittliche-konzepte"><span
+class="header-section-number">8</span> Querschnittliche Konzepte</h1>
+<p>Dieses Kapitel beschreibt technische Konzepte, die mehrere Bausteine
+des e-gov-framework betreffen und systemweit einheitlich umgesetzt
+sind.</p>
+<hr />
+<h2 data-number="8.1" id="sicherheit-und-autorisierung"><span
+class="header-section-number">8.1</span> Sicherheit und
+Autorisierung</h2>
+<h3 data-number="8.1.1" id="authentifizierung-vorgelagert"><span
+class="header-section-number">8.1.1</span> Authentifizierung
+(vorgelagert)</h3>
+<p>Das Framework führt keine eigene Authentifizierung durch. Die
+Identität des Nutzers wird durch die vorgelagerte Infrastruktur
+festgestellt. Die F5-Firewall setzt nach erfolgtem Login einen
+<code>EGOV_TOKEN</code>-Cookie. Der <code>ContextInterceptor</code> des
+Frameworks extrahiert daraus die <code>userId</code> über das
+<code>UserIdProvider</code>-Interface, das jede consuming App
+implementiert, und speichert sie für die Dauer des Requests im
+<code>DataHolder</code>-ThreadLocal.</p>
+<pre><code>HTTP-Request
+  → ContextInterceptor.preHandle()
+    → UserIdProvider.getUserId(request)   ← consuming-App-Implementierung
+    → DataHolder.setUserId(userId)        ← ThreadLocal
+  → alle nachgelagerten Komponenten lesen userId über DataHolder.getUserId()
+  → ContextInterceptor.afterCompletion()
+    → DataHolder.clear()                  ← ThreadLocal aufräumen</code></pre>
+<h3 data-number="8.1.2" id="row-based-security"><span
+class="header-section-number">8.1.2</span> Row-based Security</h3>
+<p>Jede Datenbankabfrage wird automatisch um rollenbasierte
+WHERE-Klauseln erweitert. Kein Code in der consuming App muss explizit
+filtern — die Sicherheit greift auf Infrastruktur- ebene im
+<code>QueryBuilder</code>.</p>
+<p><strong>Datenmodell (Flyway DDL):</strong></p>
+<table>
+<colgroup>
+<col style="width: 56%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tabelle</th>
+<th>Zweck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>egov_iam_role</code></td>
+<td>Rollendefinitionen</td>
+</tr>
+<tr>
+<td><code>egov_iam_role_membership</code></td>
+<td>Benutzer-Rollen-Zuordnungen (mit
+<code>valid_from</code>/<code>valid_to</code>)</td>
+</tr>
+<tr>
+<td><code>egov_iam_permission_definition</code></td>
+<td>Rollenspezifische SQL-Filterbedingungen pro Entity und
+Operation</td>
+</tr>
+<tr>
+<td><code>egov_iam_rule_set</code></td>
+<td>Validierungsregelsets pro Action</td>
+</tr>
+<tr>
+<td><code>egov_iam_condition</code></td>
+<td>Bedingungen innerhalb eines RuleSets</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ablauf:</strong></p>
+<pre><code>BaseRepositoryImpl.find(parameters)
+  → PermissionBuilder.getPermissions(userId, entityClass, operation)
+    → PermissionService.getAllowedRecordsQuery(userId, operation, clazz)
+      → Rollenermittlung aus egov_iam_role_membership (userId, aktuelles Datum)
+      → SQL-Filterausdruck aus egov_iam_permission_definition (role, entity, operation)
+      → Rückgabe: AllowedRecordsQuery (Query-String + Parameter-Werte)
+  → ParametrizedQuery wird als WHERE-Klausel in native SQL integriert</code></pre>
+<hr />
+<h2 data-number="8.2" id="command-pattern-und-audit-trail"><span
+class="header-section-number">8.2</span> Command-Pattern und
+Audit-Trail</h2>
+<p>Alle fachlichen Operationen werden als
+<code>Command</code>-JPA-Entity in der Tabelle
+<code>egov_cmd_command</code> persistiert. Dadurch entsteht ein
+lückenloses Audit-Log aller Aktionen.</p>
+<h3 data-number="8.2.1" id="status-lifecycle"><span
+class="header-section-number">8.2.1</span> Status-Lifecycle</h3>
+<pre><code>INITIALIZED
+  → RULESET_SELECTED   (nach RuleSet-Auflösung)
+  → VALIDATED          (nach Validierung)
+  → COMPLETED
+  → EXECUTED           (Endzustand: Erfolg)
+
+  → HARD_VALIDATION_FAILED   (Endzustand: Fehler)</code></pre>
+<p>Beide Felder <code>status</code> und <code>executionPlan</code> sind
+als <code>@Enumerated(EnumType.STRING)</code> gemappt.</p>
+<h3 data-number="8.2.2" id="executionplan"><span
+class="header-section-number">8.2.2</span> ExecutionPlan</h3>
+<p>Der <code>ExecutionPlan</code> steuert, ob und in welcher Reihenfolge
+Validierung und Ausführung stattfinden:</p>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr>
+<th>Wert</th>
+<th>Verhalten</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VALIDATE_BEFORE_EXECUTION</code></td>
+<td>Bricht bei Validierungsfehler ab (Standard)</td>
+</tr>
+<tr>
+<td><code>VALIDATE_BEFORE_EXECUTING_ANYWAY</code></td>
+<td>Validiert, führt aber immer aus</td>
+</tr>
+<tr>
+<td><code>VALIDATE_AFTER_EXECUTION</code></td>
+<td>Führt zuerst aus, validiert danach</td>
+</tr>
+<tr>
+<td><code>DONT_VALIDATE</code></td>
+<td>Keine Validierung</td>
+</tr>
+<tr>
+<td><code>DONT_EXECUTE</code></td>
+<td>Keine Ausführung (z.B. Dry-Run)</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="8.2.3" id="executor-varianten"><span
+class="header-section-number">8.2.3</span> Executor-Varianten</h3>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 28%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr>
+<th>Interface</th>
+<th>Merkmal</th>
+<th>Verwendung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Executor</code></td>
+<td><code>@Transactional</code> auf <code>execute()</code></td>
+<td>Standard-Schreiboperationen</td>
+</tr>
+<tr>
+<td><code>NonTxExecutor</code></td>
+<td>kein <code>@Transactional</code></td>
+<td>Operationen, die ausserhalb einer Spring-Transaktion laufen müssen
+(bekanntes Risiko R-2)</td>
+</tr>
+<tr>
+<td><code>RemoteCommandExecutor</code></td>
+<td>Ausführung über ZooKeeper</td>
+<td>Verteilte Commands über mehrere Instanzen</td>
+</tr>
+<tr>
+<td><code>BatchUpdateExecutor&lt;T&gt;</code></td>
+<td>Batch-Verarbeitung mit Progress-Logging</td>
+<td>Massenoperationen</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Basisimplementierung:</strong>
+<code>CommandHandlerBase&lt;T&gt;</code> orchestriert Validation →
+Execution → Status-Persistierung.</p>
+<hr />
+<h2 data-number="8.3" id="fehlerbehandlung"><span
+class="header-section-number">8.3</span> Fehlerbehandlung</h2>
+<h3 data-number="8.3.1" id="exception-hierarchie"><span
+class="header-section-number">8.3.1</span> Exception-Hierarchie</h3>
+<p>Alle Framework-Exceptions erben von <code>EGovException</code> und
+tragen einen strukturierten <code>code</code> (String) sowie optionale
+<code>additionalInfo</code> (Map).</p>
+<pre><code>EGovException
+  ├── NoPermissionForEntityException   → HTTP 403
+  ├── ActionNotAllowedException        → HTTP 405
+  ├── UnauthorizedException            → HTTP 401
+  └── SystemException                  → HTTP 500
+
+RuntimeException
+  └── ValidationException              (intern, kein HTTP-Mapping)</code></pre>
+<h3 data-number="8.3.2" id="einheitliche-fehlerantwort"><span
+class="header-section-number">8.3.2</span> Einheitliche
+Fehlerantwort</h3>
+<p><code>GenericExceptionHandler</code> (<code>@ControllerAdvice</code>)
+fängt alle Exceptions und wandelt sie in ein einheitliches
+<code>ResponseExceptionBody</code>-DTO um:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;message&quot;</span><span class="fu">:</span> <span class="st">&quot;No permission for entity &#39;Person&#39; (operation: READ)&quot;</span><span class="fu">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exceptionId&quot;</span><span class="fu">:</span> <span class="st">&quot;f3a1bc42-...&quot;</span><span class="fu">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;errorCode&quot;</span><span class="fu">:</span> <span class="st">&quot;EGOV_FRM_0012&quot;</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;additionalInfo&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;tableName&quot;</span><span class="fu">:</span> <span class="st">&quot;person&quot;</span><span class="fu">,</span> <span class="dt">&quot;userId&quot;</span><span class="fu">:</span> <span class="st">&quot;u42&quot;</span> <span class="fu">},</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;stackTrace&quot;</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Stacktrace</strong> wird nur ausgegeben wenn
+<code>egov.exception-log.debug=true</code> gesetzt ist.</p>
+<h3 data-number="8.3.3" id="fehler-code-schema"><span
+class="header-section-number">8.3.3</span> Fehler-Code-Schema</h3>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Code</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EGOV_FRM_0000</code></td>
+<td>Generischer Framework-Fehler</td>
+</tr>
+<tr>
+<td><code>EGOV_FRM_0001</code></td>
+<td>Ungültige Daten</td>
+</tr>
+<tr>
+<td><code>EGOV_FRM_0012</code></td>
+<td>Keine Berechtigung auf Entity</td>
+</tr>
+<tr>
+<td><code>EGOV_FRM_0013</code></td>
+<td>Kein Executor gesetzt</td>
+</tr>
+<tr>
+<td><code>EGOV_FRM_0014</code></td>
+<td>Ungültige Action</td>
+</tr>
+<tr>
+<td><code>EGOV_FRM_0015</code></td>
+<td>ZooKeeper-Fehler</td>
+</tr>
+<tr>
+<td><code>EGOV_PRS_0000</code></td>
+<td>ID-Limit überschritten (LUID)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="8.4" id="persistenz"><span
+class="header-section-number">8.4</span> Persistenz</h2>
+<h3 data-number="8.4.1" id="repository-pattern"><span
+class="header-section-number">8.4.1</span> Repository-Pattern</h3>
+<p>Alle Domänen-Entitäten der consuming App erweitern
+<code>BaseRepositoryImpl&lt;T&gt;</code>. Diese Basisklasse stellt
+generische CRUD-Operationen bereit und delegiert den Query-Bau an den
+<code>QueryBuilder</code>.</p>
+<h3 data-number="8.4.2" id="filter-dsl"><span
+class="header-section-number">8.4.2</span> Filter-DSL</h3>
+<p>REST-Anfragen können einen Filterausdruck als String übergeben. Der
+<code>FilterParser</code> und <code>Tokenizer</code> übersetzen diesen
+String in einen Abstract Syntax Tree; der <code>QueryBuilder</code>
+erzeugt daraus native SQL ohne SQL-Injection-Risiko.</p>
+<h3 data-number="8.4.3" id="multi-datenbankunterstützung"><span
+class="header-section-number">8.4.3</span>
+Multi-Datenbankunterstützung</h3>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 22%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Property</th>
+<th>Werte</th>
+<th>Standardwert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>egov.persistence.database.type</code></td>
+<td><code>POSTGRESQL</code>, <code>SQLSERVER</code></td>
+<td>— (Pflichtfeld)</td>
+</tr>
+<tr>
+<td><code>egov.persistence.database.naming.style</code></td>
+<td><code>CAMEL_CASE</code>, <code>SNAKE_CASE</code></td>
+<td><code>CAMEL_CASE</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>DatabaseConfigurationService</code> liest diese Werte und
+konfiguriert Dialekt und Naming- Strategie beim Start.</p>
+<h3 data-number="8.4.4" id="datenbankmigrationen"><span
+class="header-section-number">8.4.4</span> Datenbankmigrationen</h3>
+<p>Das Framework liefert eigene Flyway-Skripte für seine IAM- und
+Command-Tabellen mit. Consuming Apps fügen applikationsspezifische
+Skripte hinzu. Die Flyway-Schema-Filterung erfolgt über
+<code>EgovSchemaFilterProvider</code>, damit Framework-Migrations nicht
+mit App- Migrations kollidieren.</p>
+<hr />
+<h2 data-number="8.5" id="konfiguration"><span
+class="header-section-number">8.5</span> Konfiguration</h2>
+<p>Alle Framework-Properties sind unter dem Namespace
+<code>egov.*</code> in der <code>application.yml</code> der consuming
+App gruppiert. Das Framework liefert <code>egov-default.yml</code> mit
+sicheren Defaults mit.</p>
+<p><strong>Zentrale Properties:</strong></p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 27%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>egov.persistence.database.type</code></td>
+<td>—</td>
+<td>Datenbanktyp (<code>POSTGRESQL</code> / <code>SQLSERVER</code>)</td>
+</tr>
+<tr>
+<td><code>egov.persistence.database.naming.style</code></td>
+<td><code>CAMEL_CASE</code></td>
+<td>Spaltenbenennungsschema</td>
+</tr>
+<tr>
+<td><code>egov.persistence.luid.max-ids-per-tick</code></td>
+<td><code>10000</code></td>
+<td>IDs pro Sekunde pro Segment</td>
+</tr>
+<tr>
+<td><code>egov.persistence.luid.max-segments</code></td>
+<td><code>100</code></td>
+<td>Anzahl paralleler Pods/JVMs</td>
+</tr>
+<tr>
+<td><code>egov.persistence.luid.start-year</code></td>
+<td><code>2025</code></td>
+<td>Basisjahr für LUID-Berechnung</td>
+</tr>
+<tr>
+<td><code>egov.admin.is.activated</code></td>
+<td><code>false</code></td>
+<td>Admin-Modul aktivieren</td>
+</tr>
+<tr>
+<td><code>egov.permission.log.activated</code></td>
+<td><code>false</code></td>
+<td>Permission-Entscheidungen loggen</td>
+</tr>
+<tr>
+<td><code>egov.exception-log.debug</code></td>
+<td><code>false</code></td>
+<td>Stacktrace in Fehlerantworten</td>
+</tr>
+<tr>
+<td><code>egov.service.discovery.activated</code></td>
+<td><code>false</code></td>
+<td>ZooKeeper-Service-Discovery</td>
+</tr>
+<tr>
+<td><code>egov.service.discovery.zookeeper.host</code></td>
+<td><code>zookeeper</code></td>
+<td>ZooKeeper-Hostname</td>
+</tr>
+<tr>
+<td><code>egov.service.discovery.zookeeper.port</code></td>
+<td><code>2181</code></td>
+<td>ZooKeeper-Port</td>
+</tr>
+<tr>
+<td><code>egov.subscriber.core-pool-size</code></td>
+<td><code>5</code></td>
+<td>ThreadPool für Event-Subscriptions</td>
+</tr>
+<tr>
+<td><code>egov.subscriber.max-pool-size</code></td>
+<td><code>20</code></td>
+<td>Max-Threads für Event-Subscriptions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="8.6" id="logging"><span
+class="header-section-number">8.6</span> Logging</h2>
+<p>Das Framework verwendet SLF4j mit Logback als Implementierung. Alle
+relevanten Klassen tragen <code>@Slf4j</code> (Lombok). Kein MDC-Einsatz
+im Framework-Kern — die consuming App ist für das Anreichern von Logs
+(z.B. mit <code>userId</code> oder <code>requestId</code>)
+verantwortlich.</p>
+<p><strong>Log-Level-Konfiguration (Auszug):</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">logging</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">level</span><span class="kw">:</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ch.ti8m.egov.framework.exceptionhandling.exceptionhandlers</span><span class="kw">:</span><span class="at"> DEBUG</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ch.ti8m.egov.framework.validation.engine.FieldValueExtractorComponent</span><span class="kw">:</span><span class="at"> DEBUG</span></span></code></pre></div>
+<p><strong>Klassen mit relevantem Logging:</strong>
+<code>ContextInterceptor</code>, <code>PermissionBuilder</code>,
+<code>GenericExceptionHandler</code>, <code>CommandHandlerBase</code>,
+<code>LUIDGenerator</code>, <code>ZookeeperConnector</code>.</p>
+<p><code>ContextInterceptor.preHandle()</code> extrahiert neben der
+<code>userId</code> auch Request-Parameter (<code>filter</code>,
+<code>sort</code>, <code>offset</code>, <code>limit</code>,
+<code>page</code>, <code>size</code>, <code>search</code>) in den
+<code>DataHolder</code>. <code>afterCompletion()</code> bereinigt den
+ThreadLocal.</p>
+<hr />
+<h2 data-number="8.7" id="internationalisierung"><span
+class="header-section-number">8.7</span> Internationalisierung</h2>
+<p>Das optionale <code>e-gov-mdm</code>-Modul stellt mehrsprachige
+Stammdaten (Vocabularies) bereit.</p>
+<h3 data-number="8.7.1" id="datenstruktur"><span
+class="header-section-number">8.7.1</span> Datenstruktur</h3>
+<pre><code>Vocabulary
+  └── MasterDataGenericEntity (pro Eintrag und Sprache)
+        ├── code          (fachlicher Schlüssel)
+        ├── languageCode  (de, fr, it, en, ...)
+        ├── shortName
+        ├── longName
+        ├── validFrom
+        └── validTo</code></pre>
+<p><code>LanguageDefinition</code> verknüpft ein Vocabulary mit den
+verfügbaren Sprachcodes.</p>
+<h3 data-number="8.7.2" id="sprachauswahl"><span
+class="header-section-number">8.7.2</span> Sprachauswahl</h3>
+<p>Die aktive Sprache wird in folgender Reihenfolge ermittelt:</p>
+<ol type="1">
+<li><code>Content-Language</code>-Header des HTTP-Requests (gesetzt
+durch <code>ContextInterceptor</code>)</li>
+<li><code>UserLanguageProvider.getLanguage()</code> —
+Default-Implementierung: <code>Locale.getDefault()</code></li>
+</ol>
+<p>Consuming Apps können <code>UserLanguageProvider</code> als
+Spring-Bean überschreiben, um die Sprache aus dem Nutzerprofil oder
+einem anderen Request-Attribut zu lesen.</p>
+<p><strong>API-Ausgabe:</strong> <code>ResponseTranslation</code> mit
+<code>shortName</code> und <code>longName</code> pro Sprache.</p>
+<hr />
+<h2 data-number="8.8" id="id-generierung-luid"><span
+class="header-section-number">8.8</span> ID-Generierung (LUID)</h2>
+<p>Das optionale <code>e-gov-luid</code>-Modul stellt eine
+clustersichere, sortierbare ID-Strategie bereit, die keine
+Datenbanksequenz benötigt.</p>
+<h3 data-number="8.8.1" id="algorithmus-luidgenerator"><span
+class="header-section-number">8.8.1</span> Algorithmus
+(LUIDGenerator)</h3>
+<pre><code>ID = tickStep + incFromBase
+
+tickStep   = (Millisekunden seit startYear) / 1000 * maxIDsPerTick * maxSegments
+incFromBase = maxIDsPerTick * segmentId + [0 … maxIDsPerTick − 1]</code></pre>
+<ul>
+<li><strong><code>segmentId</code></strong>: eindeutiger Index des
+Pods/der JVM-Instanz (0–99 bei Default)</li>
+<li><strong><code>maxIDsPerTick</code></strong>: Anzahl IDs, die pro
+Sekunde und Segment vergeben werden können</li>
+<li><strong><code>maxSegments</code></strong>: maximale Anzahl
+paralleler Instanzen im Cluster</li>
+</ul>
+<p><code>LUIDGenerator</code> ist als Hibernate
+<code>IdentifierGenerator</code> implementiert, <code>generate()</code>
+ist <code>synchronized</code>. Konfigurierbar über
+<code>egov.persistence.luid.*</code>-Properties (siehe
+Konfiguration).</p>
+<p><strong>Eigenschaften:</strong> zeitbasiert, sortierbar,
+gap-tolerant, kein Single-Point-of-Failure, kein Round-Trip zur
+Datenbank.</p>
+<hr />
+<h2 data-number="8.9" id="testbarkeit"><span
+class="header-section-number">8.9</span> Testbarkeit</h2>
+<h3 data-number="8.9.1" id="test-pyramide"><span
+class="header-section-number">8.9.1</span> Test-Pyramide</h3>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 41%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr>
+<th>Ebene</th>
+<th>Technologie</th>
+<th>Beispiele</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit-Tests</td>
+<td>JUnit 5</td>
+<td><code>BaseRepositoryImplTest</code>,
+<code>CommandHandlerBaseTest</code>, <code>FilterBuilderTest</code></td>
+</tr>
+<tr>
+<td>Integrationstests</td>
+<td>JUnit 5 + Testcontainers</td>
+<td><code>BaseRepositoryImplIT</code>,
+<code>SubscriptionServiceIT</code></td>
+</tr>
+<tr>
+<td>ZooKeeper-Tests</td>
+<td>Testcontainers (<code>zookeeper:3.9.3</code>)</td>
+<td><code>ZookeeperTestContainer</code>-Basisklasse</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="8.9.2" id="testcontainers-konfiguration"><span
+class="header-section-number">8.9.2</span>
+Testcontainers-Konfiguration</h3>
+<p>Datenbank-Integrationstests verwenden das JDBC-URL-Schema von
+Testcontainers:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># application-test.yml</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spring</span><span class="kw">:</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">datasource</span><span class="kw">:</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">url</span><span class="kw">:</span><span class="at"> jdbc:tc:postgresql:17.4:///integration-tests-db</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">driver-class-name</span><span class="kw">:</span><span class="at"> org.testcontainers.jdbc.ContainerDatabaseDriver</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">jpa</span><span class="kw">:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">hibernate</span><span class="kw">:</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">ddl-auto</span><span class="kw">:</span><span class="at"> create-drop</span></span></code></pre></div>
+<p><strong>Weitere Profile:</strong> <code>application-h2.yml</code>
+(In-Memory), <code>application-test-sqlserver.yml</code>,
+<code>application-test-zookeeper.yml</code>,
+<code>application-test-logging-debug.yml</code>.</p>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

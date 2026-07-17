@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>6. Laufzeitsicht</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#laufzeitsicht" id="toc-laufzeitsicht"><span
+class="toc-section-number">6</span> Laufzeitsicht</a>
+<ul>
+<li><a href="#szenario-1-schreiboperation-via-command-pattern"
+id="toc-szenario-1-schreiboperation-via-command-pattern"><span
+class="toc-section-number">6.1</span> Szenario 1 — Schreiboperation via
+Command Pattern</a></li>
+<li><a
+href="#szenario-2-gefilterte-listenabfrage-mit-row-based-security"
+id="toc-szenario-2-gefilterte-listenabfrage-mit-row-based-security"><span
+class="toc-section-number">6.2</span> Szenario 2 — Gefilterte
+Listenabfrage mit Row-based Security</a></li>
+<li><a href="#szenario-3-authentication-flow-vorgelagertes-iam"
+id="toc-szenario-3-authentication-flow-vorgelagertes-iam"><span
+class="toc-section-number">6.3</span> Szenario 3 — Authentication-Flow
+(Vorgelagertes IAM)</a></li>
+<li><a href="#szenario-4-ai-gestützte-regelgenerierung"
+id="toc-szenario-4-ai-gestützte-regelgenerierung"><span
+class="toc-section-number">6.4</span> Szenario 4 — AI-gestützte
+Regelgenerierung</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="6" id="laufzeitsicht"><span
+class="header-section-number">6</span> Laufzeitsicht</h1>
+<h2 data-number="6.1"
+id="szenario-1-schreiboperation-via-command-pattern"><span
+class="header-section-number">6.1</span> Szenario 1 — Schreiboperation
+via Command Pattern</h2>
+<p>Ablauf einer typischen Schreiboperation (z.B. Anlegen einer neuen
+Entität) in einer Fachapplikation:</p>
+<pre><code>Sachbearbeiter → REST-Controller (consuming App)
+  → DomainCommandFactory.getCommand(action, dto, parameters)
+    → Command.status = INITIATED (persistiert in egov_cmd_command)
+  → BaseExecutor.execute(command)
+    → RuleSetService.getApplicableRuleSet(command)      ← DB-Abfrage egov_iam_*
+    → ValidationEngine.validate(ruleSet, dto, action)
+      → Validierungsregeln rekursiv ausgewertet → ValidationTriple
+    → [FAILED] → Command.status = HARD_VALIDATION_FAILED, ResponseExceptionBody zurückgegeben
+    → [OK]     → Command.status = VALIDATED
+               → BaseRepositoryImpl.saveWithTx(entity)
+                  → Command.status = EXECUTED
+                  → HTTP 200 / 201</code></pre>
+<p><strong>Beteiligte Bausteine:</strong> REST-Controller (App),
+<code>DomainCommandFactory</code>, <code>BaseExecutor</code>,
+<code>ValidationEngine</code>, <code>RuleSetService</code>,
+<code>BaseRepositoryImpl</code></p>
+<h2 data-number="6.2"
+id="szenario-2-gefilterte-listenabfrage-mit-row-based-security"><span
+class="header-section-number">6.2</span> Szenario 2 — Gefilterte
+Listenabfrage mit Row-based Security</h2>
+<p>Ablauf einer paginierten GET-Anfrage mit Filterausdruck:</p>
+<pre><code>Sachbearbeiter → REST-Controller (consuming App)
+  → BaseRepositoryImpl.find(parameters)
+    → QueryBuilder.buildBaseQuery(parameters, entity, config)
+      → FilterParser.parse(parameters.filter)       ← Filter-DSL → AST
+      → PermissionBuilder.append(query, userId)     ← Rollen-WHERE aus egov_iam_permission_definition
+      → Sortierung + LIMIT/OFFSET angefügt
+    → Native SQL via JDBC ausgeführt
+    → PaginatedResult&lt;T&gt; zurückgegeben
+  → HTTP 200 mit Datenliste (ausschliesslich berechtigte Zeilen)</code></pre>
+<p><strong>Beteiligte Bausteine:</strong> REST-Controller,
+<code>BaseRepositoryImpl</code>, <code>QueryBuilder</code>,
+<code>FilterParser</code>, <code>PermissionBuilder</code>,
+<code>DataHolder</code></p>
+<h2 data-number="6.3"
+id="szenario-3-authentication-flow-vorgelagertes-iam"><span
+class="header-section-number">6.3</span> Szenario 3 —
+Authentication-Flow (Vorgelagertes IAM)</h2>
+<pre><code>Sachbearbeiter → Azure AD (Login)
+  → F5-Firewall setzt EGOV_TOKEN-Cookie
+  → HTTP-Request mit Cookie → ContextInterceptor (Framework)
+    → UserIdProvider.getUserId(request)   ← Implementierung in consuming App
+    → DataHolder.setUserId(userId)        ← ThreadLocal für Request-Dauer
+  → Alle nachgelagerten Permission-Checks lesen userId aus DataHolder</code></pre>
+<p><strong>Beteiligte Bausteine:</strong> Azure AD (extern), F5-Firewall
+(extern), <code>ContextInterceptor</code>, <code>UserIdProvider</code>
+(consuming App), <code>DataHolder</code></p>
+<h2 data-number="6.4"
+id="szenario-4-ai-gestützte-regelgenerierung"><span
+class="header-section-number">6.4</span> Szenario 4 — AI-gestützte
+Regelgenerierung</h2>
+<p>Ablauf der Generierung einer neuen Validierungsregel aus natürlicher
+Sprache:</p>
+<pre><code>Framework-Entwickler / Admin → RuleModificationController (POST)
+  → RuleGenerator.generate(freitextBeschreibung)
+    → Azure OpenAI API aufgerufen
+    → Prompt enthält Grammatik der erlaubten Validierungsfunktionen
+  → RuleTranslator.translate(llmResponse)
+    → JSON → Framework-Validierungsregel-Format
+  → Regel in egov_iam_rule_set persistiert
+  → HTTP 200 mit generierter Regel</code></pre>
+<p><strong>Beteiligte Bausteine:</strong>
+<code>RuleModificationController</code>, <code>RuleGenerator</code>,
+<code>RuleTranslator</code>, Azure OpenAI (extern),
+<code>RuleSetService</code></p>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

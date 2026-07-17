@@ -1,0 +1,33 @@
+# ─── IDE – JetBrains (IntelliJ, PyCharm, …) ───────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ─── IDE – Visual Studio Code ──────────────────────────────────────────────
+.vscode/
+
+# ─── IDE – Eclipse ─────────────────────────────────────────────────────────
+.project
+.classpath
+.settings/
+
+# ─── IDE – Vim / Emacs ─────────────────────────────────────────────────────
+*.swp
+*.swo
+*~
+\#*\#
+
+# ─── Betriebssystem ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ─── Python (build-Skripte) ────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# APM dependencies
+apm_modules/

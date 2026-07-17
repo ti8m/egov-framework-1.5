@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9. Architekturentscheidungen</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#architekturentscheidungen"
+id="toc-architekturentscheidungen"><span
+class="toc-section-number">9</span> Architekturentscheidungen</a>
+<ul>
+<li><a
+href="#adr-001-framework-als-eingebettete-java-bibliothek-nicht-als-eigenständiger-service"
+id="toc-adr-001-framework-als-eingebettete-java-bibliothek-nicht-als-eigenständiger-service"><span
+class="toc-section-number">9.1</span> ADR-001: Framework als
+eingebettete Java-Bibliothek, nicht als eigenständiger Service</a>
+<ul>
+<li><a href="#kontext" id="toc-kontext"><span
+class="toc-section-number">9.1.1</span> Kontext</a></li>
+<li><a href="#entscheidung" id="toc-entscheidung"><span
+class="toc-section-number">9.1.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen" id="toc-konsequenzen"><span
+class="toc-section-number">9.1.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a
+href="#adr-002-native-jdbc-für-die-query-schicht-statt-jpa-criteria-api"
+id="toc-adr-002-native-jdbc-für-die-query-schicht-statt-jpa-criteria-api"><span
+class="toc-section-number">9.2</span> ADR-002: Native JDBC für die
+Query-Schicht statt JPA Criteria API</a>
+<ul>
+<li><a href="#kontext-1" id="toc-kontext-1"><span
+class="toc-section-number">9.2.1</span> Kontext</a></li>
+<li><a href="#entscheidung-1" id="toc-entscheidung-1"><span
+class="toc-section-number">9.2.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-1" id="toc-konsequenzen-1"><span
+class="toc-section-number">9.2.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a href="#adr-003-command-pattern-für-alle-schreiboperationen"
+id="toc-adr-003-command-pattern-für-alle-schreiboperationen"><span
+class="toc-section-number">9.3</span> ADR-003: Command-Pattern für alle
+Schreiboperationen</a>
+<ul>
+<li><a href="#kontext-2" id="toc-kontext-2"><span
+class="toc-section-number">9.3.1</span> Kontext</a></li>
+<li><a href="#entscheidung-2" id="toc-entscheidung-2"><span
+class="toc-section-number">9.3.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-2" id="toc-konsequenzen-2"><span
+class="toc-section-number">9.3.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a href="#adr-004-row-based-security-als-opt-out-statt-opt-in"
+id="toc-adr-004-row-based-security-als-opt-out-statt-opt-in"><span
+class="toc-section-number">9.4</span> ADR-004: Row-based Security als
+opt-out statt opt-in</a>
+<ul>
+<li><a href="#kontext-3" id="toc-kontext-3"><span
+class="toc-section-number">9.4.1</span> Kontext</a></li>
+<li><a href="#entscheidung-3" id="toc-entscheidung-3"><span
+class="toc-section-number">9.4.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-3" id="toc-konsequenzen-3"><span
+class="toc-section-number">9.4.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a
+href="#adr-005-vorgelagertes-iam-kein-eigener-authentifizierungsstack"
+id="toc-adr-005-vorgelagertes-iam-kein-eigener-authentifizierungsstack"><span
+class="toc-section-number">9.5</span> ADR-005: Vorgelagertes IAM — kein
+eigener Authentifizierungsstack</a>
+<ul>
+<li><a href="#kontext-4" id="toc-kontext-4"><span
+class="toc-section-number">9.5.1</span> Kontext</a></li>
+<li><a href="#entscheidung-4" id="toc-entscheidung-4"><span
+class="toc-section-number">9.5.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-4" id="toc-konsequenzen-4"><span
+class="toc-section-number">9.5.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a
+href="#adr-006-unterstützung-von-postgresql-und-sql-server-parallel"
+id="toc-adr-006-unterstützung-von-postgresql-und-sql-server-parallel"><span
+class="toc-section-number">9.6</span> ADR-006: Unterstützung von
+PostgreSQL und SQL Server parallel</a>
+<ul>
+<li><a href="#kontext-5" id="toc-kontext-5"><span
+class="toc-section-number">9.6.1</span> Kontext</a></li>
+<li><a href="#entscheidung-5" id="toc-entscheidung-5"><span
+class="toc-section-number">9.6.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-5" id="toc-konsequenzen-5"><span
+class="toc-section-number">9.6.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a
+href="#adr-007-spring-ai-azure-openai-für-llm-gestützte-regelgenerierung"
+id="toc-adr-007-spring-ai-azure-openai-für-llm-gestützte-regelgenerierung"><span
+class="toc-section-number">9.7</span> ADR-007: Spring AI + Azure OpenAI
+für LLM-gestützte Regelgenerierung</a>
+<ul>
+<li><a href="#kontext-6" id="toc-kontext-6"><span
+class="toc-section-number">9.7.1</span> Kontext</a></li>
+<li><a href="#entscheidung-6" id="toc-entscheidung-6"><span
+class="toc-section-number">9.7.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-6" id="toc-konsequenzen-6"><span
+class="toc-section-number">9.7.3</span> Konsequenzen</a></li>
+</ul></li>
+<li><a href="#adr-008-luid-als-cluster-sichere-id-generierungsstrategie"
+id="toc-adr-008-luid-als-cluster-sichere-id-generierungsstrategie"><span
+class="toc-section-number">9.8</span> ADR-008: LUID als cluster-sichere
+ID-Generierungsstrategie</a>
+<ul>
+<li><a href="#kontext-7" id="toc-kontext-7"><span
+class="toc-section-number">9.8.1</span> Kontext</a></li>
+<li><a href="#entscheidung-7" id="toc-entscheidung-7"><span
+class="toc-section-number">9.8.2</span> Entscheidung</a></li>
+<li><a href="#konsequenzen-7" id="toc-konsequenzen-7"><span
+class="toc-section-number">9.8.3</span> Konsequenzen</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="9" id="architekturentscheidungen"><span
+class="header-section-number">9</span> Architekturentscheidungen</h1>
+<p>Architecture Decision Records (ADRs) dokumentieren die wichtigen
+Entscheidungen, die die Architektur des e-gov-framework prägen. Jeder
+ADR hält Kontext, getroffene Entscheidung, betrachtete Alternativen und
+Konsequenzen fest.</p>
+<hr />
+<h2 data-number="9.1"
+id="adr-001-framework-als-eingebettete-java-bibliothek-nicht-als-eigenständiger-service"><span
+class="header-section-number">9.1</span> ADR-001: Framework als
+eingebettete Java-Bibliothek, nicht als eigenständiger Service</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2023 (Projektgründung)</p>
+<h3 data-number="9.1.1" id="kontext"><span
+class="header-section-number">9.1.1</span> Kontext</h3>
+<p>E-Government-Fachapplikationen verschiedener Schweizer Behörden
+teilen denselben Bedarf an Querschnittsfunktionen: row-based Security,
+Audit-Trail, Stammdaten, Persistence-Abstraktion. Die Frage war, wie
+diese Funktionen bereitgestellt werden sollen.</p>
+<p>Alternativen:</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 25%" />
+<col style="width: 33%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kriterium</th>
+<th>Bibliothek (JAR)</th>
+<th>Sidecar / Microservice</th>
+<th>SaaS-Plattform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deploymentkomplexität</td>
+<td>Gering (eine JVM)</td>
+<td>Hoch (zusätzlicher Prozess)</td>
+<td>Abhängig von Anbieter</td>
+</tr>
+<tr>
+<td>Latenz Permission-Check</td>
+<td>Keine (in-process)</td>
+<td>Netzwerk-Roundtrip (~ms)</td>
+<td>Netzwerk-Roundtrip</td>
+</tr>
+<tr>
+<td>Hoheit über Infrastruktur</td>
+<td>Vollständig bei Behörde</td>
+<td>Teilweise</td>
+<td>Keine</td>
+</tr>
+<tr>
+<td>Compliance / Data Residency</td>
+<td>Einfach (Daten verlassen nie die JVM)</td>
+<td>Möglich</td>
+<td>Kritisch</td>
+</tr>
+<tr>
+<td>Versionierung je Applikation</td>
+<td>Unabhängig via BOM</td>
+<td>Gemeinsamer Release-Zyklus</td>
+<td>Vorgeschrieben</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.1.2" id="entscheidung"><span
+class="header-section-number">9.1.2</span> Entscheidung</h3>
+<p>Das Framework wird als Maven-Bibliothek distribuiert. Jede consuming
+App zieht das Framework über das BOM als Abhängigkeit und betreibt es in
+derselben JVM.</p>
+<h3 data-number="9.1.3" id="konsequenzen"><span
+class="header-section-number">9.1.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Kein Netzwerk-Overhead bei
+Permission-Checks (kritisch für Row-based Security) - Jede Behörde kann
+unabhängig upgraden oder pinnen - Keine zusätzliche
+Laufzeitinfrastruktur notwendig - Vollständige Datenisolation pro
+Behörde garantiert</p>
+<p><strong>Negativ:</strong> - Framework-Logik läuft in derselben JVM
+wie Applikationslogik — Fehler im Framework können die gesamte
+Applikation betreffen - Consuming Apps tragen die Last des Upgrades
+(pom.xml-Änderung, Migrationstests) - Kein zentrales Monitoring über
+alle Deployments hinweg möglich</p>
+<hr />
+<h2 data-number="9.2"
+id="adr-002-native-jdbc-für-die-query-schicht-statt-jpa-criteria-api"><span
+class="header-section-number">9.2</span> ADR-002: Native JDBC für die
+Query-Schicht statt JPA Criteria API</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2023</p>
+<h3 data-number="9.2.1" id="kontext-1"><span
+class="header-section-number">9.2.1</span> Kontext</h3>
+<p>Das Framework muss jede SELECT-Abfrage automatisch um rollenbasierte
+WHERE-Klauseln erweitern (Row-based Security) und eine eigene Filter-DSL
+aus REST-Parametern umsetzen. JPA/Hibernate übernimmt das
+Entity-Mapping. Für die Query-Schicht standen zwei Ansätze zur
+Auswahl.</p>
+<p>Alternativen:</p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 36%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kriterium</th>
+<th>JPA Criteria API</th>
+<th>Native JDBC / SQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kontrolle über WHERE-Klauseln</td>
+<td>Eingeschränkt (Hibernate-Abstraktion)</td>
+<td>Vollständig</td>
+</tr>
+<tr>
+<td>Lesbarkeit komplexer Queries</td>
+<td>Schlecht (Boilerplate)</td>
+<td>Gut (klares SQL)</td>
+</tr>
+<tr>
+<td>Multi-DB-Unterstützung</td>
+<td>Via Hibernate-Dialekte</td>
+<td>Manuell je Dialekt</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Overhead durch Metadaten-Lookups</td>
+<td>Minimal</td>
+</tr>
+<tr>
+<td>Permission-Filter injizieren</td>
+<td>Schwierig (kein direkter SQL-Zugriff)</td>
+<td>Trivial (String-Konkatenation)</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.2.2" id="entscheidung-1"><span
+class="header-section-number">9.2.2</span> Entscheidung</h3>
+<p>Die <code>BaseRepositoryImpl</code> und der <code>QueryBuilder</code>
+verwenden natives JDBC für alle Leseabfragen. JPA/Hibernate bleibt für
+Entity-Mapping und Schreiboperationen (<code>saveWithTx</code>)
+zuständig.</p>
+<h3 data-number="9.2.3" id="konsequenzen-1"><span
+class="header-section-number">9.2.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - <code>PermissionBuilder</code> kann
+WHERE-Klauseln direkt als SQL-Fragment injizieren - Filter-DSL lässt
+sich sauber auf SQL abbilden ohne Criteria-API-Umweg - Queries sind
+lesbar und debuggbar - Performance-Ziel (&lt;500 ms für 10 000
+Entitäten) erreichbar</p>
+<p><strong>Negativ:</strong> - Zwei Persistenzmechanismen (JPA + JDBC)
+müssen koordiniert werden - SQL-Dialekte (PostgreSQL vs. SQL Server)
+müssen in <code>DatabaseConfigurationService</code> manuell behandelt
+werden - <code>BaseRepositoryImpl</code> ist deswegen komplex</p>
+<hr />
+<h2 data-number="9.3"
+id="adr-003-command-pattern-für-alle-schreiboperationen"><span
+class="header-section-number">9.3</span> ADR-003: Command-Pattern für
+alle Schreiboperationen</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2023</p>
+<h3 data-number="9.3.1" id="kontext-2"><span
+class="header-section-number">9.3.1</span> Kontext</h3>
+<p>Behörden-Applikationen unterliegen strikten Audit-Anforderungen: Jede
+fachliche Aktion muss nachvollziehbar sein (wer hat was wann getan).
+Ausserdem müssen Schreiboperationen validierbar und rollback-fähig sein.
+Es wurden zwei Modelle verglichen.</p>
+<p>Alternativen:</p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 46%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kriterium</th>
+<th>Command-Pattern (persistiert)</th>
+<th>Direkte Service-Calls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Audit-Trail</td>
+<td>Vollständig (jede Aktion als Datenbankzeile)</td>
+<td>Nur via separates Log</td>
+</tr>
+<tr>
+<td>Validierung vor/nach Ausführung</td>
+<td>Steuerbar via ExecutionPlan</td>
+<td>Inline, nicht standardisiert</td>
+</tr>
+<tr>
+<td>Nachvollziehbarkeit für Behörde</td>
+<td>Hoch (egov_cmd_command-Tabelle abfragbar)</td>
+<td>Gering</td>
+</tr>
+<tr>
+<td>Komplexität für consuming Apps</td>
+<td>Mittel (BaseExecutor, DomainCommandFactory)</td>
+<td>Gering</td>
+</tr>
+<tr>
+<td>Distributed Execution</td>
+<td>Möglich (RemoteCommandExecutor)</td>
+<td>Nicht vorgesehen</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.3.2" id="entscheidung-2"><span
+class="header-section-number">9.3.2</span> Entscheidung</h3>
+<p>Jede fachliche Schreiboperation wird als
+<code>Command</code>-JPA-Entity angelegt und mit einem Status-Lifecycle
+(<code>INITIALIZED → VALIDATED → EXECUTED</code> oder
+<code>HARD_VALIDATION_FAILED</code>) in der Tabelle
+<code>egov_cmd_command</code> persistiert.
+<code>BaseExecutor</code>-Implementierungen orchestrieren den
+Ablauf.</p>
+<h3 data-number="9.3.3" id="konsequenzen-2"><span
+class="header-section-number">9.3.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Lückenloser Audit-Trail ohne
+Zusatzkonfiguration für consuming Apps - Validerungsregeln (RuleSet)
+werden deklarativ via Annotationen definiert -
+<code>ExecutionPlan</code> ermöglicht flexible Validierungsstrategien
+pro Use-Case - Erweiterbar auf verteilte Ausführung über mehrere
+Instanzen (ZooKeeper)</p>
+<p><strong>Negativ:</strong> - Jede Schreiboperation erzeugt einen
+zusätzlichen Datenbank-Insert (Command-Tabelle) - Consuming Apps müssen
+<code>DomainCommandFactory</code> und <code>BaseExecutor</code> ableiten
+und kennen - Es besteht so das Risiko, dass das Framework falsch
+verwendet wird.</p>
+<hr />
+<h2 data-number="9.4"
+id="adr-004-row-based-security-als-opt-out-statt-opt-in"><span
+class="header-section-number">9.4</span> ADR-004: Row-based Security als
+opt-out statt opt-in</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2023</p>
+<h3 data-number="9.4.1" id="kontext-3"><span
+class="header-section-number">9.4.1</span> Kontext</h3>
+<p>Datenpannen in Behörden entstehen oft durch vergessene oder
+inkorrekte Berechtigungsprüfungen in Applikationscode. Das Framework
+sollte sicherstellen, dass kein Entwickler einer consuming App
+versehentlich ungeschützte Abfragen absetzt.</p>
+<p>Alternativen:</p>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 44%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr>
+<th>Ansatz</th>
+<th>Beschreibung</th>
+<th>Risiko</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opt-in (explizit)</td>
+<td>Entwickler ruft <code>PermissionBuilder</code> manuell auf</td>
+<td>Vergessen möglich → Datenpanne</td>
+</tr>
+<tr>
+<td>Opt-out (Default)</td>
+<td><code>QueryBuilder</code> fügt immer Permission-Filter ein;
+explizites Abschalten nötig</td>
+<td>Kein versehentliches Bypass</td>
+</tr>
+<tr>
+<td>Applikationsschicht</td>
+<td>Permission-Prüfung liegt komplett in der consuming App</td>
+<td>Fehleranfällig, kein Framework-Beitrag</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.4.2" id="entscheidung-3"><span
+class="header-section-number">9.4.2</span> Entscheidung</h3>
+<p>Der <code>QueryBuilder</code> bindet den
+<code>PermissionBuilder</code> immer automatisch ein. Jede
+<code>BaseRepositoryImpl.find()</code>-Abfrage ist per Default
+row-level-gefiltert. Ein expliziter Bypass ist nur für
+interne/Admin-Operationen über den Admin-Modus
+(<code>egov.admin.is.activated</code>) vorgesehen.</p>
+<h3 data-number="9.4.3" id="konsequenzen-3"><span
+class="header-section-number">9.4.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Ein Sachbearbeiter sieht niemals
+Datensätze ohne Berechtigung — auch nicht durch Programmierfehler in der
+consuming App - Sicherheitsverantwortliche können die Filterlogik
+zentral in <code>egov_iam_permission_definition</code> administrieren
+ohne App-Deployments</p>
+<p><strong>Negativ:</strong> - Höherer Aufwand beim initialen Setup:
+Permission-Definitionen müssen vollständig in der IAM-Tabelle gepflegt
+sein, bevor Daten sichtbar sind - Interne Batch-Jobs oder
+Admin-Operationen müssen den Admin-Modus explizit aktivieren</p>
+<hr />
+<h2 data-number="9.5"
+id="adr-005-vorgelagertes-iam-kein-eigener-authentifizierungsstack"><span
+class="header-section-number">9.5</span> ADR-005: Vorgelagertes IAM —
+kein eigener Authentifizierungsstack</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2023</p>
+<h3 data-number="9.5.1" id="kontext-4"><span
+class="header-section-number">9.5.1</span> Kontext</h3>
+<p>Schweizer Behörden betreiben eigene Identity-Management-Systeme
+(Azure AD, LDAP, eigene IdPs). Ein Framework, das selbst
+Authentifizierung implementiert, würde entweder diese Systeme
+duplizieren oder Integrationsaufwand in jeder Applikation erzwingen.</p>
+<p>Alternativen:</p>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Ansatz</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eigener JWT-Stack</td>
+<td>Framework validiert Tokens selbst, kennt Claims-Schema</td>
+</tr>
+<tr>
+<td>Spring Security Integration</td>
+<td>Framework konfiguriert Spring Security mit konfigurierbarem IdP</td>
+</tr>
+<tr>
+<td>Vorgelagertes IAM (gewählt)</td>
+<td>F5-Firewall setzt <code>EGOV_TOKEN</code>; Framework vertraut dem
+Cookie</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.5.2" id="entscheidung-4"><span
+class="header-section-number">9.5.2</span> Entscheidung</h3>
+<p>Das Framework führt keine Authentifizierung durch. Es vertraut
+darauf, dass der vorgelagerte Stack (Azure AD → F5 →
+<code>EGOV_TOKEN</code>-Cookie) eine authentifizierte
+<code>userId</code> liefert. Das <code>UserIdProvider</code>-Interface
+ist der einzige Integrationspunkt: Consuming Apps implementieren es
+einmalig für ihren spezifischen Cookie/Header.</p>
+<h3 data-number="9.5.3" id="konsequenzen-4"><span
+class="header-section-number">9.5.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Framework ist unabhängig vom konkreten
+Identity-Provider der Behörde - Keine doppelte Token-Validierungslogik
+in Framework und vorgelagertem Stack - Consuming Apps können
+<code>UserIdProvider</code> auf beliebige Auth-Quellen (JWT-Claim,
+Header, Session) mappen</p>
+<p><strong>Negativ:</strong> - Framework kann keine Claims-basierten
+Attribute (Abteilung, Berechtigungsgruppe) direkt aus dem Token lesen —
+consuming App muss das ggf. in <code>UserIdProvider</code> auflösen -
+Framework vertraut blind dem Cookie-Inhalt; korrekte TLS-Terminierung
+und Cookie-Sicherheit liegen vollständig beim vorgelagerten Stack</p>
+<hr />
+<h2 data-number="9.6"
+id="adr-006-unterstützung-von-postgresql-und-sql-server-parallel"><span
+class="header-section-number">9.6</span> ADR-006: Unterstützung von
+PostgreSQL und SQL Server parallel</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2023</p>
+<h3 data-number="9.6.1" id="kontext-5"><span
+class="header-section-number">9.6.1</span> Kontext</h3>
+<p>Verschiedene Behörden haben unterschiedliche Infrastrukturvorgaben:
+Einige betreiben PostgreSQL-Cluster (bevorzugt, Open Source, günstiger),
+andere sind durch Rahmenverträge oder IT-Governance an Microsoft SQL
+Server gebunden. Ein Framework, das nur eine Datenbank unterstützt,
+würde Behörden mit SQL-Server-Vorgaben ausschliessen.</p>
+<p>Alternativen:</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 17%" />
+<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kriterium</th>
+<th>Nur PostgreSQL</th>
+<th>Nur SQL Server</th>
+<th>Dual-DB (gewählt)</th>
+<th>Polyglot (+ H2 / MySQL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abdeckung Behördenanforderungen</td>
+<td>Unvollständig (MSSQL-Kunden ausgeschlossen)</td>
+<td>Unvollständig (PG-Kunden ausgeschlossen)</td>
+<td>Vollständig (alle aktuellen Kunden)</td>
+<td>Überabdeckung, unnötige Komplexität</td>
+</tr>
+<tr>
+<td>Implementierungsaufwand</td>
+<td>Gering</td>
+<td>Gering</td>
+<td>Mittel (2 Dialekte)</td>
+<td>Hoch (n Dialekte)</td>
+</tr>
+<tr>
+<td>CI-Aufwand (Testcontainers)</td>
+<td>1 DB-Typ</td>
+<td>1 DB-Typ</td>
+<td>2 DB-Typen</td>
+<td>n DB-Typen</td>
+</tr>
+<tr>
+<td>Wartbarkeit Dialekt-Code</td>
+<td>Hoch</td>
+<td>Hoch</td>
+<td>Mittel</td>
+<td>Gering</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.6.2" id="entscheidung-5"><span
+class="header-section-number">9.6.2</span> Entscheidung</h3>
+<p>Das Framework unterstützt beide Datenbanktypen vollständig.
+<code>DatabaseConfigurationService</code> liest
+<code>egov.persistence.database.type</code> und konfiguriert: -
+Hibernate-Dialekt - Spalten-Namensschema (<code>CAMEL_CASE</code> /
+<code>SNAKE_CASE</code>) - Datenbank-spezifische SQL-Fragmente im
+<code>QueryBuilder</code> - Flyway-Skripte pro Datenbank-Typ</p>
+<h3 data-number="9.6.3" id="konsequenzen-5"><span
+class="header-section-number">9.6.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Framework ist für alle Behörden
+einsetzbar, unabhängig von ihrer DB-Infrastruktur - Wechsel von
+PostgreSQL zu SQL Server (oder umgekehrt) erfordert nur
+Property-Änderung</p>
+<p><strong>Negativ:</strong> - Jede Änderung am Query-Layer muss gegen
+beide Datenbanken getestet werden - <code>QueryBuilder</code> und
+Flyway-Skripte müssen Dialekt-Unterschiede kennen und behandeln -
+Erhöhter CI-Aufwand: Integrationstests laufen gegen beide Datenbanken
+via Testcontainers</p>
+<hr />
+<h2 data-number="9.7"
+id="adr-007-spring-ai-azure-openai-für-llm-gestützte-regelgenerierung"><span
+class="header-section-number">9.7</span> ADR-007: Spring AI + Azure
+OpenAI für LLM-gestützte Regelgenerierung</h2>
+<p><strong>Status:</strong> Akzeptiert (experimentell)<br />
+<strong>Datum:</strong> 2024</p>
+<h3 data-number="9.7.1" id="kontext-6"><span
+class="header-section-number">9.7.1</span> Kontext</h3>
+<p>Die Pflege von Validierungsregeln in <code>egov_iam_rule_set</code>
+ist aufwändig und erfordert SQL-/Framework-Kenntnisse. Die Idee: Admins
+beschreiben Regeln in natürlicher Sprache, das System generiert die
+technische Regeldarstellung automatisch.</p>
+<p>Für die LLM-Integration standen zwei Optionen:</p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 50%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kriterium</th>
+<th>Spring AI (Abstraktionsschicht)</th>
+<th>Direktes OpenAI SDK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM-Austauschbarkeit</td>
+<td>Hoch (Providerwechsel via Config)</td>
+<td>Gering (Vendor-Lock-in)</td>
+</tr>
+<tr>
+<td>Reife</td>
+<td>Milestone-Release (1.0.0-M6)</td>
+<td>Stabil (GA)</td>
+</tr>
+<tr>
+<td>Integration in Spring Boot</td>
+<td>Native</td>
+<td>Manuell</td>
+</tr>
+<tr>
+<td>Zukünftige On-Premise-Option</td>
+<td>Möglich (lokales LLM via Spring AI)</td>
+<td>Schwierig</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.7.2" id="entscheidung-6"><span
+class="header-section-number">9.7.2</span> Entscheidung</h3>
+<p>Das Modul <code>e-gov-ai-rule-generation</code> verwendet Spring AI
+als Abstraktionsschicht und Azure OpenAI (gpt-4o) als Backend. Der
+Prompt enthält die Grammatik der erlaubten Validierungsfunktionen;
+<code>RuleTranslator</code> konvertiert die LLM-Antwort in das
+Framework-Regelformat.</p>
+<p>Das Modul wird bis zum GA-Release von Spring AI als
+<strong>experimentell</strong> gekennzeichnet.</p>
+<h3 data-number="9.7.3" id="konsequenzen-6"><span
+class="header-section-number">9.7.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Admins können Regeln aus Freitext
+generieren ohne SQL-Kenntnisse - Spring AI ermöglicht späteren Wechsel
+auf On-Premise-LLM ohne Code-Änderung</p>
+<p><strong>Negativ:</strong> - Breaking Changes zwischen Milestones
+möglich (→ Risiko R-4) - Azure OpenAI-Abhängigkeit erfordert
+Netzwerkzugang und API-Key-Verwaltung - Modul ist bisher ohne
+Testabdeckung (→ technische Schuld TD-1) - Azure OpenAI erfordert
+Cloud-Egress — dies steht in Konflikt mit der Randbedingung «Kubernetes
+On-Premise» (→ Sektion 2); der Konflikt ist bewusst akzeptiert:
+<code>e-gov-ai-rule-generation</code> ist optional, Behörden ohne
+Cloud-Freigabe lassen das Modul weg</p>
+<hr />
+<h2 data-number="9.8"
+id="adr-008-luid-als-cluster-sichere-id-generierungsstrategie"><span
+class="header-section-number">9.8</span> ADR-008: LUID als
+cluster-sichere ID-Generierungsstrategie</h2>
+<p><strong>Status:</strong> Akzeptiert<br />
+<strong>Datum:</strong> 2024</p>
+<h3 data-number="9.8.1" id="kontext-7"><span
+class="header-section-number">9.8.1</span> Kontext</h3>
+<p>Fachapplikationen, die auf Kubernetes mit mehreren Replikas laufen,
+brauchen eine ID-Generierungsstrategie, die ohne zentrale Koordination
+skaliert. Standard-Alternativen wurden bewertet:</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 25%" />
+<col style="width: 23%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr>
+<th>Strategie</th>
+<th>Sortierbarkeit</th>
+<th>DB-Abhängigkeit</th>
+<th>Cluster-sicher</th>
+<th>Lücken</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UUID v4</td>
+<td>Nicht sortierbar</td>
+<td>Keine</td>
+<td>Ja</td>
+<td>Keine</td>
+</tr>
+<tr>
+<td>DB-Sequenz</td>
+<td>Sortierbar</td>
+<td>Ja (Single Point)</td>
+<td>Nur mit DB-Failover</td>
+<td>Möglich</td>
+</tr>
+<tr>
+<td>ULID</td>
+<td>Sortierbar (ms-Präzision)</td>
+<td>Keine</td>
+<td>Bedingt (Kollision möglich)</td>
+<td>Keine</td>
+</tr>
+<tr>
+<td>LUID (gewählt)</td>
+<td>Sortierbar (sek-Präzision)</td>
+<td>Keine</td>
+<td>Ja (via segmentId)</td>
+<td>Toleriert</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="9.8.2" id="entscheidung-7"><span
+class="header-section-number">9.8.2</span> Entscheidung</h3>
+<p>Das Modul <code>e-gov-luid</code> stellt <code>LUIDGenerator</code>
+bereit — einen Hibernate <code>IdentifierGenerator</code>, der
+zeitbasierte, sortierbare IDs ohne Datenbankzugriff generiert. Jeder Pod
+erhält eine eindeutige <code>segmentId</code> (0–99), die Kollisionen
+zwischen Instanzen ausschliesst.</p>
+<pre><code>ID = ((Sekunden seit 2025-01-01) * maxIDsPerTick * maxSegments)
+   + (maxIDsPerTick * segmentId)
+   + laufende Nummer [0 … maxIDsPerTick − 1]</code></pre>
+<h3 data-number="9.8.3" id="konsequenzen-7"><span
+class="header-section-number">9.8.3</span> Konsequenzen</h3>
+<p><strong>Positiv:</strong> - Keine Datenbankabfrage bei ID-Generierung
+→ Durchsatz und Latenz verbessert - IDs sind sortierbar → natürliche
+Paginierung und Index-Effizienz - Skaliert bis 100 parallele Pods bei
+Defaultkonfiguration</p>
+<p><strong>Negativ:</strong> - <code>segmentId</code> muss beim
+Deployment korrekt konfiguriert sein — falscher Wert kann Kollisionen
+verursachen - IDs sind nicht zufällig (Information Disclosure:
+Erstellungszeitpunkt ableitbar) - Fehlkonfiguration (zwei Pods mit
+gleicher <code>segmentId</code>) führt zu Kollisionen ohne sofortige
+Fehlermeldung</p>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

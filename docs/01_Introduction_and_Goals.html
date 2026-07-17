@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>1. Einführung und Ziele</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#einführung-und-ziele" id="toc-einführung-und-ziele"><span
+class="toc-section-number">1</span> Einführung und Ziele</a>
+<ul>
+<li><a href="#aufgabenstellung" id="toc-aufgabenstellung"><span
+class="toc-section-number">1.1</span> Aufgabenstellung</a></li>
+<li><a href="#qualitätsziele" id="toc-qualitätsziele"><span
+class="toc-section-number">1.2</span> Qualitätsziele</a></li>
+<li><a href="#stakeholder" id="toc-stakeholder"><span
+class="toc-section-number">1.3</span> Stakeholder</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="einführung-und-ziele"><span
+class="header-section-number">1</span> Einführung und Ziele</h1>
+<h2 data-number="1.1" id="aufgabenstellung"><span
+class="header-section-number">1.1</span> Aufgabenstellung</h2>
+<p>Das e-gov-framework ist eine Java-Bibliothek (kein eigenständiges
+System), die Schweizer Behörden und Ämter dabei unterstützt,
+E-Government-Fachapplikationen effizient und sicher zu entwickeln. Es
+stellt technische Grundfunktionen bereit, die in allen E-Gov-Projekten
+wiederkehren: regelbasierte Autorisierung auf Zeilen- und Feldebene, ein
+generisches Persistence-Layer mit dynamischer Filtersprache,
+Stammdatenverwaltung (MDM) sowie ein Command-basiertes
+Verarbeitungsmodell für nachvollziehbare Schreiboperationen.</p>
+<p>Das Framework wird von ti&amp;m AG entwickelt und über ein
+Maven-Repository (Artifactory) bereitgestellt. Behörden beziehen es als
+Abhängigkeit und bauen darauf ihre spezifischen Fachapplikationen
+auf.</p>
+<h2 data-number="1.2" id="qualitätsziele"><span
+class="header-section-number">1.2</span> Qualitätsziele</h2>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 30%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>Priorität</th>
+<th>Qualitätsziel</th>
+<th>Motivation / Szenario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Wartbarkeit / Developer Experience</strong></td>
+<td>Ein Entwicklerteam einer Behörde soll innerhalb eines Tages eine
+neue CRUD-Domäne (Entity, Repository, Command, REST-Endpoint)
+vollständig integrieren können</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Performance der Query-Schicht</strong></td>
+<td>Eine gefilterte, paginierte Liste von 10 000 Entitäten muss
+inklusive Permission-Filter in unter 500 ms geliefert werden</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Row-based Security</strong></td>
+<td>Jede Datenbankabfrage wird automatisch um rollenbasierte
+WHERE-Klauseln erweitert — ein Benutzer sieht niemals Datensätze, für
+die er keine Berechtigung besitzt</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Stammdatenkonsistenz</strong></td>
+<td>Das zentrale MDM-Modul stellt sicher, dass alle Fachapplikationen
+identische, mehrsprachige Codelisten verwenden</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Nachvollziehbarkeit / Audit-Trail</strong></td>
+<td>Jede fachliche Schreiboperation ist mit Benutzer, Zeitstempel und
+Status in der Command-Tabelle protokolliert (Compliance-Anforderung der
+Behörden)</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Zuverlässigkeit</strong></td>
+<td>Das Framework verhält sich bei Pod-Ausfällen und Startfehlern
+vorhersehbar — Datenverlust und stiller Misserfolg werden
+verhindert</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Portabilität / Datenbankflexibilität</strong></td>
+<td>Ein Datenbankwechsel zwischen PostgreSQL und SQL Server erfordert
+keine Code-Änderungen in consuming Apps</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Betreibbarkeit</strong></td>
+<td>Fehlkonfigurationen werden beim Start erkannt und gemeldet, bevor
+Traffic auf den Pod geleitet wird</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Testbarkeit</strong></td>
+<td>Integrationstests laufen ohne produktive Infrastruktur, sodass
+Entwickler und CI-Pipelines schnell Feedback erhalten</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="1.3" id="stakeholder"><span
+class="header-section-number">1.3</span> Stakeholder</h2>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Rolle</th>
+<th>Erwartung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework-Team (ti&amp;m)</strong></td>
+<td>Wartbare, gut testbare Codebasis; klare Release-Prozesse via
+Semantic Release</td>
+</tr>
+<tr>
+<td><strong>Entwicklerteams der Behörden</strong></td>
+<td>Schneller Einstieg, geringe Boilerplate, stabile API zwischen
+Minor-Versionen</td>
+</tr>
+<tr>
+<td><strong>Behörden / Ämter (Betreiber)</strong></td>
+<td>Compliance mit Sicherheitsvorgaben, stabiler Betrieb, klar
+dokumentierte Konfiguration</td>
+</tr>
+<tr>
+<td><strong>Endnutzer (Sachbearbeiter)</strong></td>
+<td>Schnelle Antwortzeiten, korrekte Zugriffskontrolle auf Daten</td>
+</tr>
+<tr>
+<td><strong>Sicherheitsverantwortliche</strong></td>
+<td>Nachvollziehbarer Audit-Trail (Command-Tabelle), row-based
+Security</td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

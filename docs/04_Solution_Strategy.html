@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>4. Lösungsstrategie</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#lösungsstrategie" id="toc-lösungsstrategie"><span
+class="toc-section-number">4</span> Lösungsstrategie</a>
+<ul>
+<li><a href="#technologie-entscheidungen"
+id="toc-technologie-entscheidungen"><span
+class="toc-section-number">4.1</span>
+Technologie-Entscheidungen</a></li>
+<li><a href="#top-level-zerlegung" id="toc-top-level-zerlegung"><span
+class="toc-section-number">4.2</span> Top-Level-Zerlegung</a></li>
+<li><a href="#wesentliche-designprinzipien"
+id="toc-wesentliche-designprinzipien"><span
+class="toc-section-number">4.3</span> Wesentliche
+Designprinzipien</a></li>
+<li><a href="#erreichung-der-qualitätsziele"
+id="toc-erreichung-der-qualitätsziele"><span
+class="toc-section-number">4.4</span> Erreichung der
+Qualitätsziele</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="4" id="lösungsstrategie"><span
+class="header-section-number">4</span> Lösungsstrategie</h1>
+<h2 data-number="4.1" id="technologie-entscheidungen"><span
+class="header-section-number">4.1</span> Technologie-Entscheidungen</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 40%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr>
+<th>Bereich</th>
+<th>Entscheidung</th>
+<th>Begründung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Persistence</strong></td>
+<td>JPA/Hibernate + nativer JDBC für Queries</td>
+<td>JPA für Entity-Mapping; native SQL im <code>QueryBuilder</code> für
+volle Kontrolle über Permission-Filter und dynamische
+WHERE-Klauseln</td>
+</tr>
+<tr>
+<td><strong>Datenbankmigrationen</strong></td>
+<td>Flyway</td>
+<td>Versionierte, reproduzierbare Schema-Migrationen; Framework liefert
+eigene Skripte mit</td>
+</tr>
+<tr>
+<td><strong>Multi-DB</strong></td>
+<td>PostgreSQL + SQL Server</td>
+<td>Behörden haben unterschiedliche Infrastrukturvorgaben; beide
+Dialekte werden unterstützt</td>
+</tr>
+<tr>
+<td><strong>Build &amp; Distribution</strong></td>
+<td>Maven BOM + Artifactory</td>
+<td>BOM ermöglicht konsistentes Dependency-Management; Artifactory als
+internes Registry</td>
+</tr>
+<tr>
+<td><strong>AI-Integration</strong></td>
+<td>Spring AI + Azure OpenAI</td>
+<td>Regelgenerierung aus Freitext; Spring AI als Abstraktionsschicht für
+spätere LLM-Wechselbarkeit</td>
+</tr>
+<tr>
+<td><strong>Service Discovery</strong></td>
+<td>Apache Curator / ZooKeeper</td>
+<td>Optionale verteilte Command-Ausführung über Instanzen hinweg</td>
+</tr>
+<tr>
+<td><strong>ID-Generierung</strong></td>
+<td>LUID / DB-Sequence / ULID (<code>e-gov-luid</code>)</td>
+<td>Sortierbare, gap-tolerante IDs je nach Anforderung der
+Applikation</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="4.2" id="top-level-zerlegung"><span
+class="header-section-number">4.2</span> Top-Level-Zerlegung</h2>
+<p>Das Framework ist als <strong>Maven-Bibliothek</strong> strukturiert
+— es läuft nicht selbst, sondern wird in Fachapplikationen eingebettet.
+Die Zerlegung folgt dem Prinzip <strong>Kern + optionale
+Erweiterungsmodule</strong>:</p>
+<pre><code>e-gov-bom                  ← Dependency-Versionssteuerung (kein Code)
+e-gov-framework            ← Pflicht-Kern: Persistence, IAM, Command-Pattern, Exception-Handling
+e-gov-luid                 ← Optional: alternative ID-Generierungsstrategien
+e-gov-mdm                  ← Optional: Stammdatenverwaltung (Codelisten, Vokabulare)
+e-gov-mdm-api              ← Optional: REST-API-Layer für MDM
+e-gov-ai-rule-generation   ← Optional: LLM-gestützte Regelgenerierung
+e-gov-framework-demo       ← Referenzimplementierung (nicht für Produktion)</code></pre>
+<h2 data-number="4.3" id="wesentliche-designprinzipien"><span
+class="header-section-number">4.3</span> Wesentliche
+Designprinzipien</h2>
+<ul>
+<li><strong>Convention over Configuration</strong> — Spring Boot
+Auto-Konfiguration; consuming Apps benötigen nur wenige
+<code>egov.*</code>-Properties</li>
+<li><strong>Command Pattern für alle Schreiboperationen</strong> — jede
+fachliche Aktion wird als <code>Command</code>-Entity persistiert;
+ermöglicht Audit-Trail und nachvollziehbaren Rollback</li>
+<li><strong>Deklarative Autorisierung via Annotationen</strong> —
+<code>@Ruleset</code>, <code>@AllowedForRoles</code>,
+<code>@Validation</code> auf DTOs; Laufzeit-Auswertung durch
+<code>ValidationEngine</code></li>
+<li><strong>Row-based Security by Default</strong> —
+<code>QueryBuilder</code> fügt automatisch Permission-Filter ein; kein
+explizites opt-in nötig</li>
+<li><strong>Eigene Filter-DSL</strong> — ermöglicht dynamische,
+ausdrucksstarke WHERE-Klauseln aus REST-Anfragen ohne
+SQL-Injection-Risiko</li>
+<li><strong>Soft-Delete</strong> — Archivierung statt physischem Löschen
+via <code>ArchivedModifiableEntity</code></li>
+</ul>
+<h2 data-number="4.4" id="erreichung-der-qualitätsziele"><span
+class="header-section-number">4.4</span> Erreichung der
+Qualitätsziele</h2>
+<table>
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr>
+<th>Qualitätsziel</th>
+<th>Massnahme</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wartbarkeit</strong></td>
+<td>BOM, Convention over Configuration, generische Basisklassen
+(<code>BaseRepositoryImpl</code>, <code>BaseExecutor</code>,
+<code>BaseAction</code>) minimieren Wiederholung in consuming Apps</td>
+</tr>
+<tr>
+<td><strong>Performance Query-Schicht</strong></td>
+<td>Nativer JDBC im <code>QueryBuilder</code> statt JPA-Criteria-API;
+Permission-Filter direkt in SQL; konfigurierbare Paginierung</td>
+</tr>
+<tr>
+<td><strong>Row-based Security</strong></td>
+<td><code>PermissionBuilder</code> erweitert jede SELECT-Abfrage
+automatisch um rollenbasierte WHERE-Bedingungen; keine manuelle
+Filterung nötig</td>
+</tr>
+<tr>
+<td><strong>Stammdatenkonsistenz</strong></td>
+<td>Zentrales MDM-Modul mit mehrsprachiger Unterstützung; alle Apps
+greifen auf denselben Vokabular-Store zu</td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

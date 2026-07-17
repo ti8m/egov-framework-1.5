@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>12. Glossar</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#glossar" id="toc-glossar"><span
+class="toc-section-number">12</span> Glossar</a>
+<ul>
+<li><a href="#framework-konzepte" id="toc-framework-konzepte"><span
+class="toc-section-number">12.1</span> Framework-Konzepte</a></li>
+<li><a href="#systemkomponenten-und-externe-systeme"
+id="toc-systemkomponenten-und-externe-systeme"><span
+class="toc-section-number">12.2</span> Systemkomponenten und externe
+Systeme</a></li>
+<li><a href="#abkürzungen" id="toc-abkürzungen"><span
+class="toc-section-number">12.3</span> Abkürzungen</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="12" id="glossar"><span
+class="header-section-number">12</span> Glossar</h1>
+<p>Wichtige Fach- und Technikbegriffe alphabetisch sortiert.
+Domänenspezifische Framework-Konzepte, Abkürzungen und externe
+Systembezeichnungen.</p>
+<hr />
+<h2 data-number="12.1" id="framework-konzepte"><span
+class="header-section-number">12.1</span> Framework-Konzepte</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Begriff</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ArchivedModifiableEntity</strong></td>
+<td>JPA-Basisklasse für Soft-Delete; Entitäten werden archiviert statt
+physisch gelöscht. Alle Abfragen filtern archivierte Einträge
+automatisch aus.</td>
+</tr>
+<tr>
+<td><strong>BaseExecutor</strong></td>
+<td>Abstraktes Interface, das eine <code>execute(Command)</code>-Methode
+vorschreibt. Koordiniert den Command-Lifecycle: Validation → Ausführung
+→ Status-Persistierung. Zwei Varianten: <code>Executor</code>
+(transaktional) und <code>NonTxExecutor</code>
+(nicht-transaktional).</td>
+</tr>
+<tr>
+<td><strong>BaseRepositoryImpl</strong></td>
+<td>Abstrakte Basisklasse für alle Domänen-Repositories. Stellt
+generische CRUD-Operationen bereit und delegiert Query-Bau an
+<code>QueryBuilder</code>. Consuming Apps leiten pro Domänen-Entity eine
+Subklasse ab.</td>
+</tr>
+<tr>
+<td><strong>Command</strong></td>
+<td>JPA-Entity in Tabelle <code>egov_cmd_command</code>, die eine
+fachliche Schreiboperation repräsentiert. Enthält Benutzer, Zeitstempel,
+Aktion und Status-Lifecycle. Bildet die Grundlage des Audit-Trails.</td>
+</tr>
+<tr>
+<td><strong>CommandHandlerBase</strong></td>
+<td>Basis-Implementierung von <code>BaseExecutor</code> für
+Standard-Schreiboperationen. Consuming Apps leiten davon
+domänenspezifische Executors ab.</td>
+</tr>
+<tr>
+<td><strong>Consuming App</strong></td>
+<td>Fachapplikation einer Behörde, die das e-gov-framework als
+Maven-Dependency einbindet. Das Framework läuft in derselben JVM wie die
+Fachapplikation.</td>
+</tr>
+<tr>
+<td><strong>ContextInterceptor</strong></td>
+<td>Spring <code>HandlerInterceptor</code>, der bei jedem HTTP-Request
+die <code>userId</code> aus dem <code>EGOV_TOKEN</code>-Cookie
+extrahiert und im <code>DataHolder</code> ablegt. Bereinigt den
+ThreadLocal in <code>afterCompletion()</code>.</td>
+</tr>
+<tr>
+<td><strong>DataHolder</strong></td>
+<td>ThreadLocal-Kontext, der für die Dauer eines Requests die
+<code>userId</code> und Request-Parameter (<code>filter</code>,
+<code>sort</code>, <code>page</code>, <code>size</code> u.a.) hält. Wird
+von allen Framework-Komponenten gelesen.</td>
+</tr>
+<tr>
+<td><strong>DatabaseConfigurationService</strong></td>
+<td>Spring-Bean, der beim Start
+<code>egov.persistence.database.type</code> und
+<code>egov.persistence.database.naming.style</code> liest und
+Hibernate-Dialekt sowie Spalten-Namensschema konfiguriert.</td>
+</tr>
+<tr>
+<td><strong>DomainCommandFactory</strong></td>
+<td>Abstrakte Fabrik, die consuming Apps ableiten, um domänenspezifische
+<code>Command</code>-Instanzen zu erzeugen und mit Audit-Informationen
+zu befüllen.</td>
+</tr>
+<tr>
+<td><strong>EGOV_TOKEN</strong></td>
+<td>HTTP-Cookie, das die F5-Firewall nach erfolgtem Azure-AD-Login setzt
+und die <code>userId</code> des authentifizierten Benutzers enthält. Das
+Framework führt keine eigene Token-Validierung durch.</td>
+</tr>
+<tr>
+<td><strong>ExecutionPlan</strong></td>
+<td>Enum auf dem <code>Command</code>, das steuert ob und wann
+Validierung und Ausführung stattfinden:
+<code>VALIDATE_BEFORE_EXECUTION</code>,
+<code>VALIDATE_BEFORE_EXECUTING_ANYWAY</code>,
+<code>VALIDATE_AFTER_EXECUTION</code>, <code>DONT_VALIDATE</code>,
+<code>DONT_EXECUTE</code>.</td>
+</tr>
+<tr>
+<td><strong>Filter-DSL</strong></td>
+<td>Eigenentwickelte Filtersprache für REST-Anfragen (z.B.
+<code>status==ACTIVE;name==M*</code>). <code>FilterParser</code> und
+<code>Tokenizer</code> übersetzen den String in einen Abstract Syntax
+Tree; <code>QueryBuilder</code> erzeugt daraus parameterisiertes
+SQL.</td>
+</tr>
+<tr>
+<td><strong>GenericExceptionHandler</strong></td>
+<td>Spring <code>@ControllerAdvice</code>, der alle
+<code>EGovException</code>-Subklassen abfängt und in ein strukturiertes
+<code>ResponseExceptionBody</code>-JSON umwandelt (inkl.
+<code>errorCode</code>, <code>exceptionId</code>).</td>
+</tr>
+<tr>
+<td><strong>LUID</strong></td>
+<td><em>Locally Unique Identifier</em> — zeitbasierte, sortierbare,
+cluster-sichere ID-Strategie des Moduls <code>e-gov-luid</code>. Kein
+Datenbankzugriff bei der Generierung; Eindeutigkeit über mehrere Pods
+via <code>segmentId</code>.</td>
+</tr>
+<tr>
+<td><strong>LUIDGenerator</strong></td>
+<td>Hibernate <code>IdentifierGenerator</code>, der LUIDs erzeugt.
+Thread-sicher (<code>synchronized</code>). Konfigurierbar über
+<code>egov.persistence.luid.*</code>-Properties.</td>
+</tr>
+<tr>
+<td><strong>ModifiableEntity</strong></td>
+<td>JPA-Basisklasse mit Audit-Feldern (<code>createdBy</code>,
+<code>modifiedBy</code>, Zeitstempel). Alle Framework-Entitäten und
+Domänen-Entitäten der consuming Apps erben davon.</td>
+</tr>
+<tr>
+<td><strong>NonTxExecutor</strong></td>
+<td>Variante von <code>BaseExecutor</code> ohne
+<code>@Transactional</code> — für Operationen, die ausserhalb einer
+Spring-Transaktion laufen müssen. Bekanntes Risiko (R-2); wird in
+Framework 2.0 adressiert.</td>
+</tr>
+<tr>
+<td><strong>PermissionBuilder</strong></td>
+<td>Komponente, die für eine <code>userId</code>, eine Entity-Klasse und
+eine <code>PermissionOperation</code> eine parametrisierte
+SQL-WHERE-Klausel erzeugt. Wird vom <code>QueryBuilder</code>
+automatisch in jede Leseabfrage eingebunden.</td>
+</tr>
+<tr>
+<td><strong>PermissionService</strong></td>
+<td>Service, der die aktiven Rollenberechtigungen eines Benutzers aus
+den IAM-Tabellen liest und <code>AllowedRecordsQuery</code>-Objekte
+zurückgibt.</td>
+</tr>
+<tr>
+<td><strong>QueryBuilder</strong></td>
+<td>Kernkomponente der Persistence-Schicht. Baut native SQL-Abfragen aus
+Filter-DSL, Sortierung, Paginierung und Permission-Filter zusammen.</td>
+</tr>
+<tr>
+<td><strong>RemoteCommandExecutor</strong></td>
+<td><code>BaseExecutor</code>-Variante für verteilte Command-Ausführung
+über mehrere Kubernetes-Pods hinweg, koordiniert via ZooKeeper.</td>
+</tr>
+<tr>
+<td><strong>RuleSet</strong></td>
+<td>Datenbankgespeicherte Menge von Validierungsregeln für eine
+bestimmte Aktion. <code>RuleSetService</code> ermittelt den passenden
+RuleSet; <code>ValidationEngine</code> wertet ihn gegen DTO-Felder
+aus.</td>
+</tr>
+<tr>
+<td><strong>RuleSetService</strong></td>
+<td>Service, der den für eine Kombination aus Aktion und Benutzerrolle
+passenden <code>RuleSet</code> aus den IAM-Tabellen ermittelt.</td>
+</tr>
+<tr>
+<td><strong>Row-based Security</strong></td>
+<td>Sicherheitskonzept, bei dem jede Datenbankabfrage automatisch um
+benutzer- und rollenspezifische WHERE-Klauseln erweitert wird. Kein
+Benutzer sieht Datensätze, für die keine
+<code>permission_definition</code> existiert. Opt-out statt Opt-in
+(ADR-004).</td>
+</tr>
+<tr>
+<td><strong>Soft-Delete</strong></td>
+<td>Archivierungsstrategie: Entitäten werden nicht physisch gelöscht,
+sondern als archiviert markiert. Umsetzung über
+<code>ArchivedModifiableEntity</code>.</td>
+</tr>
+<tr>
+<td><strong>UserIdProvider</strong></td>
+<td>Interface, das jede consuming App einmalig implementiert, um die
+<code>userId</code> aus dem <code>EGOV_TOKEN</code>-Cookie (oder einem
+anderen Auth-Mechanismus) zu extrahieren. Einziger Integrationspunkt für
+die Authentifizierung.</td>
+</tr>
+<tr>
+<td><strong>ValidationEngine</strong></td>
+<td>Komponente, die RuleSet-Validierungsregeln rekursiv gegen DTO-Felder
+auswertet und ein <code>ValidationTriple</code> (OK / FAILED +
+Fehlerbeschreibung) zurückgibt.</td>
+</tr>
+<tr>
+<td><strong>Vocabulary</strong></td>
+<td>MDM-Konzept für eine benannte Sammlung mehrsprachiger Code-Werte
+(z.B. Ortschaften, Anreden, Sprachen). Besteht aus
+<code>LanguageDefinition</code>-Einträgen und
+<code>MasterDataGenericEntity</code>-Zeilen pro Sprache.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="12.2" id="systemkomponenten-und-externe-systeme"><span
+class="header-section-number">12.2</span> Systemkomponenten und externe
+Systeme</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Begriff</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ArgoCD</strong></td>
+<td>GitOps-Deployment-Tool, das Kubernetes-Ressourcen aus einem
+Git-Repository synchronisiert. Consuming Apps werden über ArgoCD auf
+Kubernetes-Clustern der Behörden ausgerollt.</td>
+</tr>
+<tr>
+<td><strong>Artifactory</strong></td>
+<td>Maven-Artefakt-Registry von JFrog, betrieben von ti&amp;m unter
+<code>bin.ti8m.ch/artifactory/</code>. Einziges Distributions-Repository
+für Framework-JARs; nicht Maven Central.</td>
+</tr>
+<tr>
+<td><strong>Azure AD</strong></td>
+<td>Microsoft Azure Active Directory — Identity Provider der Behörden.
+Stellt nach erfolgreicher Authentifizierung das
+<code>EGOV_TOKEN</code>-Cookie via F5 aus.</td>
+</tr>
+<tr>
+<td><strong>Azure OpenAI</strong></td>
+<td>Cloud-Dienst von Microsoft für OpenAI-Modelle (gpt-4o). Wird vom
+Modul <code>e-gov-ai-rule-generation</code> für die LLM-gestützte
+Regelgenerierung genutzt.</td>
+</tr>
+<tr>
+<td><strong>F5</strong></td>
+<td>F5 BIG-IP Reverse Proxy / Firewall, der TLS terminiert und nach
+Azure-AD-Login den <code>EGOV_TOKEN</code>-Cookie setzt.</td>
+</tr>
+<tr>
+<td><strong>Flyway</strong></td>
+<td>Datenbank-Migrationstool. Das Framework liefert eigene
+Flyway-Skripte für IAM- und Command-Tabellen mit; consuming Apps
+ergänzen applikationsspezifische Skripte.</td>
+</tr>
+<tr>
+<td><strong>Spring AI</strong></td>
+<td>Spring-Framework-Erweiterung als Abstraktionsschicht für
+LLM-Integration. Ermöglicht späteren Wechsel des LLM-Providers ohne
+Code-Änderung. Aktuell als Milestone-Release eingesetzt (→ Risiko
+R-4).</td>
+</tr>
+<tr>
+<td><strong>ZooKeeper</strong></td>
+<td>Verteiltes Koordinationssystem (Apache). Optional; wird für
+<code>RemoteCommandExecutor</code> genutzt, wenn Commands über mehrere
+Pod-Instanzen hinweg verteilt ausgeführt werden sollen.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="12.3" id="abkürzungen"><span
+class="header-section-number">12.3</span> Abkürzungen</h2>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 35%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr>
+<th>Abkürzung</th>
+<th>Bedeutung</th>
+<th>Kontext</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ADR</strong></td>
+<td>Architecture Decision Record</td>
+<td>Sektion 9: dokumentiert wichtige Architekturentscheidungen im
+Nygard-Format</td>
+</tr>
+<tr>
+<td><strong>arc42</strong></td>
+<td>Architecture 42</td>
+<td>Template-Standard für Softwarearchitektur-Dokumentation
+(https://arc42.org)</td>
+</tr>
+<tr>
+<td><strong>BOM</strong></td>
+<td>Bill of Materials</td>
+<td>Maven-Konzept; <code>e-gov-bom</code> steuert die Versionen aller
+Framework-Abhängigkeiten zentral</td>
+</tr>
+<tr>
+<td><strong>CRUD</strong></td>
+<td>Create, Read, Update, Delete</td>
+<td>Grundlegende Datenbankoperationen; <code>BaseRepositoryImpl</code>
+stellt sie generisch bereit</td>
+</tr>
+<tr>
+<td><strong>DDL</strong></td>
+<td>Data Definition Language</td>
+<td>SQL-Befehle zur Schemadefinition; Framework liefert Flyway-DDL für
+IAM- und Command-Tabellen</td>
+</tr>
+<tr>
+<td><strong>DSL</strong></td>
+<td>Domain-Specific Language</td>
+<td>Im Framework: Filter-DSL für REST-Anfragen (z.B.
+<code>status==ACTIVE;name==M*</code>)</td>
+</tr>
+<tr>
+<td><strong>DTO</strong></td>
+<td>Data Transfer Object</td>
+<td>Datenobjekt für REST-Schnittstellen; trägt <code>@Ruleset</code>-
+und <code>@Validation</code>-Annotationen</td>
+</tr>
+<tr>
+<td><strong>IAM</strong></td>
+<td>Identity and Access Management</td>
+<td>Framework-Modul <code>ch.ti8m.egov.framework.iam</code>: Rollen,
+RuleSets, Permissions</td>
+</tr>
+<tr>
+<td><strong>JDBC</strong></td>
+<td>Java Database Connectivity</td>
+<td>Low-level Java API für Datenbankzugriff; wird im
+<code>QueryBuilder</code> für native SQL-Abfragen genutzt</td>
+</tr>
+<tr>
+<td><strong>JPA</strong></td>
+<td>Java Persistence API</td>
+<td>ORM-Standard; wird für Entity-Mapping und Schreiboperationen
+eingesetzt</td>
+</tr>
+<tr>
+<td><strong>LTS</strong></td>
+<td>Long-Term Support</td>
+<td>Java-Release-Kategorie; Java 21 ist die aktuelle LTS-Version
+(Randbedingung)</td>
+</tr>
+<tr>
+<td><strong>LUID</strong></td>
+<td>Locally Unique Identifier</td>
+<td>Zeitbasierte, sortierbare, cluster-sichere ID-Strategie des
+<code>e-gov-luid</code>-Moduls</td>
+</tr>
+<tr>
+<td><strong>MDM</strong></td>
+<td>Master Data Management</td>
+<td>Modul <code>e-gov-mdm</code>: verwaltet mehrsprachige Stammdaten
+(Vocabularies, Codelisten)</td>
+</tr>
+<tr>
+<td><strong>REST</strong></td>
+<td>Representational State Transfer</td>
+<td>HTTP-basiertes API-Stil; alle Framework-Endpunkte sind REST-konform
+und via SpringDoc/OpenAPI dokumentiert</td>
+</tr>
+<tr>
+<td><strong>RBAC</strong></td>
+<td>Role-Based Access Control</td>
+<td>Berechtigungskonzept: Zugriff wird anhand von Rollen gesteuert;
+Basis des IAM-Moduls</td>
+</tr>
+<tr>
+<td><strong>SemVer</strong></td>
+<td>Semantic Versioning</td>
+<td>Versionierungsschema <code>MAJOR.MINOR.PATCH</code>; Breaking
+Changes → Major-Bump; automatisiert via Conventional Commits + Semantic
+Release</td>
+</tr>
+<tr>
+<td><strong>ULID</strong></td>
+<td>Universally Unique Lexicographically Sortable Identifier</td>
+<td>Alternative ID-Strategie in <code>e-gov-luid</code>; ms-präzise,
+ohne segmentId</td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>
