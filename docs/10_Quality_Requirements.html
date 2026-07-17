@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10. Qualitätsanforderungen</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#qualitätsanforderungen"
+id="toc-qualitätsanforderungen"><span
+class="toc-section-number">10</span> Qualitätsanforderungen</a>
+<ul>
+<li><a href="#qualitätsbaum" id="toc-qualitätsbaum"><span
+class="toc-section-number">10.1</span> Qualitätsbaum</a></li>
+<li><a href="#qualitätsszenarien" id="toc-qualitätsszenarien"><span
+class="toc-section-number">10.2</span> Qualitätsszenarien</a>
+<ul>
+<li><a href="#qs-01-neue-crud-domäne-in-kurzer-zeit"
+id="toc-qs-01-neue-crud-domäne-in-kurzer-zeit"><span
+class="toc-section-number">10.2.1</span> QS-01: Neue CRUD-Domäne in
+kurzer Zeit</a></li>
+<li><a href="#qs-02-breaking-changes-vor-dem-upgrade-erkennbar"
+id="toc-qs-02-breaking-changes-vor-dem-upgrade-erkennbar"><span
+class="toc-section-number">10.2.2</span> QS-02: Breaking Changes vor dem
+Upgrade erkennbar</a></li>
+<li><a href="#qs-03-gefilterte-listenabfrage-unter-500-ms"
+id="toc-qs-03-gefilterte-listenabfrage-unter-500-ms"><span
+class="toc-section-number">10.2.3</span> QS-03: Gefilterte Listenabfrage
+unter 500 ms</a></li>
+<li><a href="#qs-04-kein-benutzer-sieht-unberechtigt-datensätze"
+id="toc-qs-04-kein-benutzer-sieht-unberechtigt-datensätze"><span
+class="toc-section-number">10.2.4</span> QS-04: Kein Benutzer sieht
+unberechtigt Datensätze</a></li>
+<li><a href="#qs-05-jede-operation-nachvollziehbar"
+id="toc-qs-05-jede-operation-nachvollziehbar"><span
+class="toc-section-number">10.2.5</span> QS-05: Jede Operation
+nachvollziehbar</a></li>
+<li><a href="#qs-06-pod-ausfall-ohne-datenverlust"
+id="toc-qs-06-pod-ausfall-ohne-datenverlust"><span
+class="toc-section-number">10.2.6</span> QS-06: Pod-Ausfall ohne
+Datenverlust</a></li>
+<li><a href="#qs-07-datenbankwechsel-ohne-code-änderung"
+id="toc-qs-07-datenbankwechsel-ohne-code-änderung"><span
+class="toc-section-number">10.2.7</span> QS-07: Datenbankwechsel ohne
+Code-Änderung</a></li>
+<li><a href="#qs-08-integrationstests-ohne-produktive-infrastruktur"
+id="toc-qs-08-integrationstests-ohne-produktive-infrastruktur"><span
+class="toc-section-number">10.2.8</span> QS-08: Integrationstests ohne
+produktive Infrastruktur</a></li>
+<li><a href="#qs-09-stammdatenkonsistenz-über-applikationsgrenzen"
+id="toc-qs-09-stammdatenkonsistenz-über-applikationsgrenzen"><span
+class="toc-section-number">10.2.9</span> QS-09: Stammdatenkonsistenz
+über Applikationsgrenzen</a></li>
+</ul></li>
+<li><a href="#mengengerüst" id="toc-mengengerüst"><span
+class="toc-section-number">10.3</span> Mengengerüst</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="10" id="qualitätsanforderungen"><span
+class="header-section-number">10</span> Qualitätsanforderungen</h1>
+<p>Die drei wichtigsten Qualitätsziele sind in <a
+href="01_Introduction_and_Goals.html">Sektion 1.2</a> beschrieben.
+Dieses Kapitel enthält den vollständigen Qualitätsbaum und messbare
+Szenarien für alle relevanten Qualitätskategorien.</p>
+<hr />
+<h2 data-number="10.1" id="qualitätsbaum"><span
+class="header-section-number">10.1</span> Qualitätsbaum</h2>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 40%" />
+<col style="width: 21%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kategorie</th>
+<th>Qualitätsanforderung</th>
+<th>Priorität</th>
+<th>Szenario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wartbarkeit</strong></td>
+<td>Neue CRUD-Domäne in einem Arbeitstag integrierbar</td>
+<td>Hoch</td>
+<td>QS-01</td>
+</tr>
+<tr>
+<td><strong>Wartbarkeit</strong></td>
+<td>Breaking Changes erkennbar vor dem Upgrade</td>
+<td>Hoch</td>
+<td>QS-02</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>Gefilterte, paginierte Liste von 10 000 Entitäten in &lt; 500
+ms</td>
+<td>Hoch</td>
+<td>QS-03</td>
+</tr>
+<tr>
+<td><strong>Sicherheit</strong></td>
+<td>Kein Benutzer sieht unberechtigt Datensätze</td>
+<td>Hoch</td>
+<td>QS-04</td>
+</tr>
+<tr>
+<td><strong>Sicherheit</strong></td>
+<td>Jede Schreiboperation ist nachvollziehbar</td>
+<td>Hoch</td>
+<td>QS-05</td>
+</tr>
+<tr>
+<td><strong>Zuverlässigkeit</strong></td>
+<td>Pod-Ausfall ohne Datenverlust und ohne manuelle Intervention</td>
+<td>Mittel</td>
+<td>QS-06</td>
+</tr>
+<tr>
+<td><strong>Zuverlässigkeit</strong></td>
+<td>Framework-Startfehler werden frühzeitig erkannt</td>
+<td>Mittel</td>
+<td>QS-07</td>
+</tr>
+<tr>
+<td><strong>Portabilität</strong></td>
+<td>Datenbankwechsel ohne Code-Änderung in consuming Apps</td>
+<td>Mittel</td>
+<td>QS-08</td>
+</tr>
+<tr>
+<td><strong>Betreibbarkeit</strong></td>
+<td>Fehlkonfiguration wird beim Start gemeldet</td>
+<td>Mittel</td>
+<td>QS-09</td>
+</tr>
+<tr>
+<td><strong>Testbarkeit</strong></td>
+<td>Integrationstests ohne produktive Infrastruktur ausführbar</td>
+<td>Niedrig</td>
+<td>QS-10</td>
+</tr>
+<tr>
+<td><strong>Stammdatenkonsistenz</strong></td>
+<td>Alle Fachapplikationen verwenden identische, mehrsprachige
+Codelisten</td>
+<td>Mittel</td>
+<td>QS-11</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="10.2" id="qualitätsszenarien"><span
+class="header-section-number">10.2</span> Qualitätsszenarien</h2>
+<h3 data-number="10.2.1"
+id="qs-01-neue-crud-domäne-in-kurzer-zeit"><span
+class="header-section-number">10.2.1</span> QS-01: Neue CRUD-Domäne in
+kurzer Zeit</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Wartbarkeit / Developer Experience</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Ein Entwickler einer Behörde erhält den Auftrag, eine neue Domäne
+(Entity, Repository, Command, REST-Endpoint) zu implementieren</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Consuming App mit konfiguriertem e-gov-framework; Entwickler kennt
+die Dokumentation und die Demo-Applikation</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td>Framework-Kern (<code>BaseRepositoryImpl</code>,
+<code>BaseExecutor</code>, <code>DomainCommandFactory</code>)</td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Die Domäne ist vollständig integriert: persistierbar,
+permission-gefiltert, audit-getrailed, per REST erreichbar</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>Aufwand ≤ 1 Arbeitstag (8 h) für einen Entwickler mit
+Java/Spring-Erfahrung</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> BOM für konsistentes
+Dependency-Management;
+<code>BaseRepositoryImpl</code>/<code>BaseExecutor</code>-Basisklassen;
+Convention over Configuration via Spring Boot Auto-Konfiguration;
+<code>egov-framework-demo</code> als Referenzimplementierung.</p>
+<hr />
+<h3 data-number="10.2.2"
+id="qs-02-breaking-changes-vor-dem-upgrade-erkennbar"><span
+class="header-section-number">10.2.2</span> QS-02: Breaking Changes vor
+dem Upgrade erkennbar</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Wartbarkeit / Evolvierbarkeit</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Das Framework-Team veröffentlicht eine neue Version</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Consuming App; Entwickler prüft Kompatibilität vor dem
+BOM-Upgrade</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td>Maven BOM, CHANGELOG, Semantic Versioning</td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Breaking Changes sind als Major-Version-Bump (SemVer) und im
+CHANGELOG dokumentiert; Minor/Patch-Upgrades sind ohne Anpassung in der
+consuming App möglich</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>100 % der Breaking Changes werden als Major-Version veröffentlicht;
+CHANGELOG enthält Migration-Hinweise</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Conventional Commits
+steuern automatische Versionsvergabe via Semantic Release; CHANGELOG
+wird automatisch generiert; Artifactory als versioniertes
+Repository.</p>
+<hr />
+<h3 data-number="10.2.3"
+id="qs-03-gefilterte-listenabfrage-unter-500-ms"><span
+class="header-section-number">10.2.3</span> QS-03: Gefilterte
+Listenabfrage unter 500 ms</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Performance / Effizienz</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Ein Sachbearbeiter lädt eine gefilterte, paginierte Liste</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Produktivsystem unter Normallast; Tabelle enthält 10 000 Entitäten;
+Benutzer hat eingeschränkte Rollenberechtigungen</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td><code>QueryBuilder</code>, <code>PermissionBuilder</code>,
+<code>FilterParser</code>, Datenbankindex</td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Die gefilterte, permission-bereinigte, paginierte Ergebnisliste wird
+korrekt zurückgeliefert</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>Gesamtantwortzeit (inkl. Permission-Filter) ≤ 500 ms (p95)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Nativer JDBC statt JPA
+Criteria API (kein ORM-Overhead); Permission-Filter direkt in SQL (kein
+Post-Filter in Java); Indizes auf <code>egov_iam_role_membership</code>
+(userId, valid_from, valid_to).</p>
+<p><strong>Bekannte Grenze:</strong> <code>Tokenizer.java</code> wirft
+einen Stack Overflow bei IN-Conditions mit ca. 1 300+ Werten (→ Risiko
+R-1).</p>
+<hr />
+<h3 data-number="10.2.4"
+id="qs-04-kein-benutzer-sieht-unberechtigt-datensätze"><span
+class="header-section-number">10.2.4</span> QS-04: Kein Benutzer sieht
+unberechtigt Datensätze</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Sicherheit / Vertraulichkeit</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Ein Sachbearbeiter sendet eine Listeanfrage für Entitäten, für die
+er keine Berechtigung hat</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Produktivsystem; Benutzer ist authentifiziert, aber nicht für alle
+Datensätze autorisiert</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td><code>PermissionBuilder</code>, <code>BaseRepositoryImpl</code>,
+<code>egov_iam_permission_definition</code></td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Die Antwort enthält ausschliesslich Datensätze, für die eine
+<code>permission_definition</code> mit der Rolle des Benutzers
+existiert; unberechtigte Datensätze werden weder zurückgegeben noch als
+fehlend signalisiert</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>0 unberechtigte Datensätze in jeder Antwort; nachweisbar durch
+Integrationstests mit verschiedenen Rollen</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Row-based Security als
+opt-out (ADR-004); <code>PermissionBuilder</code> ist ohne expliziten
+Admin-Modus nicht umgehbar.</p>
+<hr />
+<h3 data-number="10.2.5" id="qs-05-jede-operation-nachvollziehbar"><span
+class="header-section-number">10.2.5</span> QS-05: Jede Operation
+nachvollziehbar</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Sicherheit / Nachvollziehbarkeit / Compliance</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Ein Sicherheitsverantwortlicher oder Prüfer möchte nachvollziehen,
+wer wann welche Datenänderung vorgenommen hat</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Produktivsystem; die Fachapplikation nutzt <code>BaseExecutor</code>
+für alle Schreiboperationen</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td><code>Command</code>-Tabelle (<code>egov_cmd_command</code>),
+<code>DomainCommandFactory</code></td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Jede Schreiboperation ist als Zeile in <code>egov_cmd_command</code>
+protokolliert: Benutzer, Zeitstempel, Aktion, Status
+(<code>EXECUTED</code> / <code>HARD_VALIDATION_FAILED</code>)</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>100 % aller Schreiboperationen, die über <code>BaseExecutor</code>
+laufen, sind in der Command-Tabelle eingetragen</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Command-Pattern für
+alle Schreiboperationen (ADR-003); <code>INITIALIZED</code>-Status wird
+vor der Ausführung persistiert, sodass auch abgebrochene Operationen
+sichtbar sind.</p>
+<p><strong>Bekannte Grenze:</strong>
+<code>NonTxExecutor</code>-Operationen laufen ausserhalb von
+Spring-Transaktionen; bei einem Pod-Ausfall während solcher Operationen
+ist die Rollback-Garantie nicht gewährleistet (→ Risiko R-2). Dies wird
+in Framework 2.0 adressiert.</p>
+<hr />
+<h3 data-number="10.2.6" id="qs-06-pod-ausfall-ohne-datenverlust"><span
+class="header-section-number">10.2.6</span> QS-06: Pod-Ausfall ohne
+Datenverlust</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Zuverlässigkeit / Fehlertoleranz</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Ein Kubernetes-Pod, der das Framework ausführt, fällt während einer
+Schreiboperation aus</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Produktivsystem; Kubernetes-Cluster mit mehreren Replikas;
+PostgreSQL mit synchronem Commit</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td><code>Command</code>-Tabelle, Spring-Transaktionsmanagement,
+Kubernetes Liveness/Readiness Probes</td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Neue Anfragen werden durch Kubernetes auf verbleibende Pods
+umgeleitet; halbfertige Transaktionen werden durch die Datenbank
+zurückgerollt; der <code>Command</code>-Eintrag verbleibt im Status
+<code>INITIALIZED</code> und ist damit als unvollständig erkennbar</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>Kein stiller Datenverlust; Wiederherstellungszeit &lt; 30 s
+(Kubernetes-Probe-Intervall)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Command-Status
+<code>INITIALIZED</code> wird vor der Ausführung persistiert;
+Spring-Transaktionen stellen atomares Rollback sicher; LUID-IDs sind
+ohne DB-Koordination erzeugbar.</p>
+<p><strong>Bekannte Grenze:</strong>
+<code>NonTxExecutor</code>-Operationen laufen ausserhalb von
+Spring-Transaktionen; ein Pod-Ausfall während solcher Operationen kann
+zu inkonsistenten Datenbankzuständen führen (→ Risiko R-2). Dies wird in
+Framework 2.0 adressiert.</p>
+<hr />
+<h3 data-number="10.2.7"
+id="qs-07-datenbankwechsel-ohne-code-änderung"><span
+class="header-section-number">10.2.7</span> QS-07: Datenbankwechsel ohne
+Code-Änderung</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Portabilität / Flexibilität</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Eine Behörde wechselt ihre Infrastruktur von PostgreSQL zu SQL
+Server (oder umgekehrt)</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Bestehende consuming App; neues Datenbankschema wird mit Flyway
+migriert</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td><code>DatabaseConfigurationService</code>,
+<code>QueryBuilder</code>, Flyway-Skripte</td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Die consuming App läuft nach Anpassung von
+<code>egov.persistence.database.type</code> ohne Änderung an Java-Code
+oder Queries korrekt gegen die neue Datenbank</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>0 Code-Änderungen in der consuming App beim DB-Typwechsel; alle
+Integrationstests bestehen gegen beide Datenbanktypen</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Dual-DB-Support
+(ADR-006); <code>DatabaseConfigurationService</code> kapselt alle
+Dialekt-Unterschiede.</p>
+<hr />
+<h3 data-number="10.2.8"
+id="qs-08-integrationstests-ohne-produktive-infrastruktur"><span
+class="header-section-number">10.2.8</span> QS-08: Integrationstests
+ohne produktive Infrastruktur</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Testbarkeit</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Ein Entwickler führt die Integrationstests lokal oder in der
+CI-Pipeline aus</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Entwickler-Workstation oder GitLab-CI-Runner; kein Zugriff auf
+produktive Datenbanken</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td>Testcontainers-Konfiguration, <code>application-test.yml</code></td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Die Integrationstests starten PostgreSQL und ggf. ZooKeeper als
+kurzlebige Docker-Container und laufen vollständig durch</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>Alle Integrationstests laufen ohne externe Infrastruktur;
+Ausführungszeit in CI &lt; 10 Minuten</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Testcontainers mit
+JDBC-URL-Protokoll (<code>jdbc:tc:postgresql:...</code>); separate
+Test-Profile für PostgreSQL, SQL Server, H2 und ZooKeeper.</p>
+<hr />
+<h3 data-number="10.2.9"
+id="qs-09-stammdatenkonsistenz-über-applikationsgrenzen"><span
+class="header-section-number">10.2.9</span> QS-09: Stammdatenkonsistenz
+über Applikationsgrenzen</h3>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 93%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspekt</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kategorie</strong></td>
+<td>Stammdatenkonsistenz / Interoperabilität</td>
+</tr>
+<tr>
+<td><strong>Stimulus</strong></td>
+<td>Fachapplikationen können auf denselben Codelisten-Typ zugreifen
+(z.B. Nationalität)</td>
+</tr>
+<tr>
+<td><strong>Umgebung</strong></td>
+<td>Produktivsystem; beide Apps nutzen das <code>e-gov-mdm</code>-Modul
+mit gemeinsamer Datenbank</td>
+</tr>
+<tr>
+<td><strong>Artefakt</strong></td>
+<td><code>e-gov-mdm</code>, <code>e-gov-mdm-api</code>,
+<code>egov_mdm_vocabulary</code>-Tabellen</td>
+</tr>
+<tr>
+<td><strong>Reaktion</strong></td>
+<td>Beide Applikationen liefern identische, mehrsprachige
+Codelisten-Werte für denselben Code-Typ</td>
+</tr>
+<tr>
+<td><strong>Metrik</strong></td>
+<td>0 Inkonsistenzen zwischen Applikationen bei Codelisten-Abfragen;
+nachweisbar durch cross-App-Integrationstests</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Architektonische Massnahmen:</strong> Zentrales MDM-Modul als
+Single Source of Truth; <code>e-gov-mdm-api</code> stellt REST-Endpunkte
+bereit; Flyway-Migrations-Skripte sichern konsistente
+Codelisten-Initialisierung.</p>
+<hr />
+<h2 data-number="10.3" id="mengengerüst"><span
+class="header-section-number">10.3</span> Mengengerüst</h2>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 22%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Kennzahl</th>
+<th>Wert</th>
+<th>Bemerkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maximale Entitäten pro Tabelle (Richtwert)</td>
+<td>10 000</td>
+<td></td>
+</tr>
+<tr>
+<td>Maximale IN-Filter-Werte</td>
+<td>ca. 1 300</td>
+<td>Technisches Limit Tokenizer (Risiko R-1)</td>
+</tr>
+<tr>
+<td>Maximale parallele Pod-Instanzen</td>
+<td>100</td>
+<td>LUID-Konfiguration <code>maxSegments</code></td>
+</tr>
+<tr>
+<td>Unterstützte Datenbanktypen</td>
+<td>2 (PostgreSQL, SQL Server)</td>
+<td></td>
+</tr>
+<tr>
+<td>Unterstützte Sprachen (MDM)</td>
+<td>de, fr, it, en</td>
+<td>Konfigurierbar via <code>UserLanguageProvider</code></td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

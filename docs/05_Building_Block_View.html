@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>5. Bausteinsicht</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#bausteinsicht" id="toc-bausteinsicht"><span
+class="toc-section-number">5</span> Bausteinsicht</a>
+<ul>
+<li><a href="#whitebox-gesamtsystem"
+id="toc-whitebox-gesamtsystem"><span
+class="toc-section-number">5.1</span> Whitebox Gesamtsystem</a>
+<ul>
+<li><a href="#enthaltene-bausteine" id="toc-enthaltene-bausteine"><span
+class="toc-section-number">5.1.1</span> Enthaltene Bausteine</a></li>
+<li><a href="#wichtige-schnittstellen"
+id="toc-wichtige-schnittstellen"><span
+class="toc-section-number">5.1.2</span> Wichtige Schnittstellen</a></li>
+</ul></li>
+<li><a href="#ebene-2-detailzerlegung-e-gov-framework-kern"
+id="toc-ebene-2-detailzerlegung-e-gov-framework-kern"><span
+class="toc-section-number">5.2</span> Ebene 2 — Detailzerlegung
+e-gov-framework (Kern)</a>
+<ul>
+<li><a href="#persistence-ch.ti8m.egov.framework.persistence"
+id="toc-persistence-ch.ti8m.egov.framework.persistence"><span
+class="toc-section-number">5.2.1</span> Persistence
+(<code>ch.ti8m.egov.framework.persistence</code>)</a></li>
+<li><a href="#iam-ch.ti8m.egov.framework.iam"
+id="toc-iam-ch.ti8m.egov.framework.iam"><span
+class="toc-section-number">5.2.2</span> IAM
+(<code>ch.ti8m.egov.framework.iam</code>)</a></li>
+<li><a href="#command-validation-ch.ti8m.egov.framework.validation"
+id="toc-command-validation-ch.ti8m.egov.framework.validation"><span
+class="toc-section-number">5.2.3</span> Command &amp; Validation
+(<code>ch.ti8m.egov.framework.validation</code>)</a></li>
+<li><a
+href="#exception-handling-context-ch.ti8m.egov.framework.exceptionhandling"
+id="toc-exception-handling-context-ch.ti8m.egov.framework.exceptionhandling"><span
+class="toc-section-number">5.2.4</span> Exception Handling &amp; Context
+(<code>ch.ti8m.egov.framework.exceptionhandling</code>)</a></li>
+</ul></li>
+<li><a href="#ebene-2-detailzerlegung-e-gov-ai-rule-generation"
+id="toc-ebene-2-detailzerlegung-e-gov-ai-rule-generation"><span
+class="toc-section-number">5.3</span> Ebene 2 — Detailzerlegung
+e-gov-ai-rule-generation</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="5" id="bausteinsicht"><span
+class="header-section-number">5</span> Bausteinsicht</h1>
+<h2 data-number="5.1" id="whitebox-gesamtsystem"><span
+class="header-section-number">5.1</span> Whitebox Gesamtsystem</h2>
+<p>Das e-gov-framework besteht aus einem Pflicht-Kernmodul und vier
+optionalen Erweiterungsmodulen. Fachapplikationen beziehen die Module
+als Maven-Dependencies über das BOM.</p>
+<figure>
+<img
+src="images/05_Building_Blocks/gesamtsystem.Bausteinsicht%20Gesamtsystem.svg"
+alt="Bausteinsicht Gesamtsystem" />
+<figcaption aria-hidden="true">Bausteinsicht Gesamtsystem</figcaption>
+</figure>
+<p class="img-link"><a href="images/05_Building_Blocks/gesamtsystem.Bausteinsicht%20Gesamtsystem.svg" target="_blank" rel="noopener">↗ Vollbild</a></p>
+<p class="img-source"><a href="images/05_Building_Blocks/gesamtsystem.Bausteinsicht%20Gesamtsystem.svg" target="_blank" rel="noopener">Bildquelle Bausteinsicht Gesamtsystem (SVG)</a></p><h3 data-number="5.1.1" id="enthaltene-bausteine"><span
+class="header-section-number">5.1.1</span> Enthaltene Bausteine</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Baustein</th>
+<th>Verantwortung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>e-gov-bom</strong></td>
+<td>Bill of Materials — zentrale Versionssteuerung aller
+Framework-Abhängigkeiten; kein ausführbarer Code</td>
+</tr>
+<tr>
+<td><strong>e-gov-framework</strong></td>
+<td>Kern: Persistence-Abstraktion, IAM (Rollen/RuleSets),
+Command-Pattern, Exception-Handling, OpenAPI-Integration</td>
+</tr>
+<tr>
+<td><strong>e-gov-mdm</strong></td>
+<td>Stammdatenverwaltung: Vokabulare (Codelisten), mehrsprachige Codes,
+erweiterbare Felddefinitionen</td>
+</tr>
+<tr>
+<td><strong>e-gov-mdm-api</strong></td>
+<td>REST-API-Layer für MDM; OpenAPI-Dokumentation; Maven-Plugin zur
+Ruleset-SQL-Generierung</td>
+</tr>
+<tr>
+<td><strong>e-gov-ai-rule-generation</strong></td>
+<td>LLM-gestützte Generierung von Validierungsregeln aus natürlicher
+Sprache (Azure OpenAI / gpt-4o)</td>
+</tr>
+<tr>
+<td><strong>e-gov-luid</strong></td>
+<td>Alternative ID-Generierungsstrategien: LUID (sortierbar,
+cluster-sicher), DB-Sequence, ULID</td>
+</tr>
+<tr>
+<td><strong>e-gov-framework-demo</strong></td>
+<td>Referenzimplementierung; zeigt korrekten Einsatz aller Module</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="5.1.2" id="wichtige-schnittstellen"><span
+class="header-section-number">5.1.2</span> Wichtige Schnittstellen</h3>
+<table>
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>Schnittstelle</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BaseRepositoryImpl&lt;T&gt;</code></td>
+<td>Abstrakte Basisklasse; consuming Apps erweitern sie für jede
+Domänen-Entity</td>
+</tr>
+<tr>
+<td><code>BaseExecutor</code></td>
+<td>Abstrakte Basis für Command-Executor; kapselt Validation +
+Persistierung</td>
+</tr>
+<tr>
+<td><code>UserIdProvider</code></td>
+<td>Interface; consuming Apps implementieren es, um <code>userId</code>
+aus dem <code>EGOV_TOKEN</code>-Cookie zu extrahieren</td>
+</tr>
+<tr>
+<td><code>DomainCommandFactory</code></td>
+<td>Abstrakte Fabrik; consuming Apps erzeugen domänenspezifische
+Commands</td>
+</tr>
+<tr>
+<td><code>@Ruleset</code> / <code>@Validation</code></td>
+<td>Annotationen auf DTOs; deklarieren Autorisierungs- und
+Validierungsregeln</td>
+</tr>
+<tr>
+<td><code>egov.*</code> Properties</td>
+<td>Konfigurationspunkte in <code>application.yml</code> der consuming
+App</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="5.2"
+id="ebene-2-detailzerlegung-e-gov-framework-kern"><span
+class="header-section-number">5.2</span> Ebene 2 — Detailzerlegung
+e-gov-framework (Kern)</h2>
+<p>Der Kern gliedert sich in vier interne Pakete.</p>
+<h3 data-number="5.2.1"
+id="persistence-ch.ti8m.egov.framework.persistence"><span
+class="header-section-number">5.2.1</span> Persistence
+(<code>ch.ti8m.egov.framework.persistence</code>)</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Baustein</th>
+<th>Verantwortung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BaseRepositoryImpl</code></td>
+<td>Generische CRUD-Operationen; delegiert Query-Bau an
+<code>QueryBuilder</code></td>
+</tr>
+<tr>
+<td><code>QueryBuilder</code></td>
+<td>Baut native SQL-Abfragen aus Filter-DSL, Sortierung, Paginierung und
+Permission-Filter</td>
+</tr>
+<tr>
+<td><code>FilterParser</code> / <code>Tokenizer</code></td>
+<td>Parsen den Filter-DSL-String in einen Abstract Syntax Tree</td>
+</tr>
+<tr>
+<td><code>PermissionBuilder</code></td>
+<td>Ergänzt jede SELECT-Abfrage um rollenbasierte WHERE-Klauseln</td>
+</tr>
+<tr>
+<td><code>ModifiableEntity</code></td>
+<td>Basis-JPA-Entity mit Audit-Feldern (<code>createdBy</code>,
+<code>modifiedBy</code>, Zeitstempel)</td>
+</tr>
+<tr>
+<td><code>DatabaseConfigurationService</code></td>
+<td>Liest <code>egov.persistence.database.type</code> und
+<code>naming.style</code>; konfiguriert Dialekt</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="5.2.2" id="iam-ch.ti8m.egov.framework.iam"><span
+class="header-section-number">5.2.2</span> IAM
+(<code>ch.ti8m.egov.framework.iam</code>)</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Baustein</th>
+<th>Verantwortung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RuleSetService</code></td>
+<td>Ermittelt den passenden RuleSet für eine Action + Benutzerrolle</td>
+</tr>
+<tr>
+<td><code>PermissionService</code></td>
+<td>Prüft ob ein Benutzer eine Operation (READ/WRITE/DELETE) auf einer
+Entity ausführen darf</td>
+</tr>
+<tr>
+<td><code>RoleService</code></td>
+<td>Verwaltet Rollen und Rollenmitgliedschaften</td>
+</tr>
+<tr>
+<td><code>IAMController</code></td>
+<td>REST-Endpunkt <code>GET /iam/v1/permissions</code></td>
+</tr>
+<tr>
+<td>RuleSet-Entities</td>
+<td>JPA-Entities in Tabellen <code>egov_iam_rule_set</code>,
+<code>egov_iam_condition</code>, <code>egov_iam_role*</code></td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="5.2.3"
+id="command-validation-ch.ti8m.egov.framework.validation"><span
+class="header-section-number">5.2.3</span> Command &amp; Validation
+(<code>ch.ti8m.egov.framework.validation</code>)</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Baustein</th>
+<th>Verantwortung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Command</code></td>
+<td>JPA-Entity; persistiert jede fachliche Aktion (Tabelle
+<code>egov_cmd_command</code>) mit Status-Lifecycle
+(<code>INITIATED → VALIDATED → EXECUTED / FAILED</code>)</td>
+</tr>
+<tr>
+<td><code>DomainCommandFactory</code></td>
+<td>Erzeugt und initialisiert Commands; setzt Audit-Informationen</td>
+</tr>
+<tr>
+<td><code>BaseExecutor</code></td>
+<td>Orchestriert Validation (via <code>ValidationEngine</code>) →
+Ausführung → Persistierung</td>
+</tr>
+<tr>
+<td><code>ValidationEngine</code></td>
+<td>Wertet RuleSet-Validierungsregeln rekursiv gegen DTO-Felder aus</td>
+</tr>
+<tr>
+<td><code>NonTxExecutor</code></td>
+<td>Führt Commands ausserhalb einer Spring-Transaktion aus</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="5.2.4"
+id="exception-handling-context-ch.ti8m.egov.framework.exceptionhandling"><span
+class="header-section-number">5.2.4</span> Exception Handling &amp;
+Context (<code>ch.ti8m.egov.framework.exceptionhandling</code>)</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Baustein</th>
+<th>Verantwortung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GenericExceptionHandler</code></td>
+<td><code>@ControllerAdvice</code>; wandelt alle
+<code>EGovException</code>-Subklassen in strukturierte
+HTTP-Fehlerantworten um</td>
+</tr>
+<tr>
+<td><code>DataHolder</code></td>
+<td>ThreadLocal-Kontext; hält <code>userId</code> für den aktuellen
+Request</td>
+</tr>
+<tr>
+<td><code>ContextInterceptor</code></td>
+<td>HTTP-Interceptor; extrahiert <code>userId</code> aus
+<code>EGOV_TOKEN</code> und befüllt <code>DataHolder</code></td>
+</tr>
+<tr>
+<td><code>EGovException</code>-Hierarchie</td>
+<td><code>ActionNotAllowedException</code>,
+<code>NoPermissionForEntityException</code>,
+<code>UnauthorizedException</code>, <code>SystemException</code></td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="5.3"
+id="ebene-2-detailzerlegung-e-gov-ai-rule-generation"><span
+class="header-section-number">5.3</span> Ebene 2 — Detailzerlegung
+e-gov-ai-rule-generation</h2>
+<p>Das KI-Modul ist als optionales Erweiterungsmodul konzipiert und
+enthält drei Bausteine, die den Workflow von der Freitext-Eingabe bis
+zur persistierten Validierungsregel abbilden.</p>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>Baustein</th>
+<th>Verantwortung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RuleModificationController</code></td>
+<td>REST-Endpunkt (POST); nimmt Freitext-Beschreibung entgegen und
+orchestriert Generierung und Persistierung der neuen Regel</td>
+</tr>
+<tr>
+<td><code>RuleGenerator</code></td>
+<td>Baut den Prompt aus Freitext + Regelgrammatik und ruft Azure OpenAI
+(gpt-4o) über Spring AI auf</td>
+</tr>
+<tr>
+<td><code>RuleTranslator</code></td>
+<td>Konvertiert die LLM-Antwort in das Framework-Regelformat und
+persistiert die Regel via <code>RuleSetService</code> in
+<code>egov_iam_rule_set</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Externe Abhängigkeit:</strong> <code>RuleGenerator</code>
+kommuniziert mit Azure OpenAI über HTTPS (Cloud-Egress); die übrigen
+Bausteine kommunizieren ausschliesslich mit dem
+<code>e-gov-framework</code>-Kern (→ Szenario 4 in Sektion 6).</p>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

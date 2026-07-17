@@ -1,0 +1,679 @@
+/* ARC42 Architekturdokumentation – Website Stylesheet */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --navy:      #1e3a5f;
+  --navy-2:    #2d5280;
+  --blue:      #2563eb;
+  --blue-bg:   #eff6ff;
+  --text:      #111827;
+  --muted:     #6b7280;
+  --border:    #e5e7eb;
+  --bg:        #ffffff;
+  --bg-alt:    #f3f4f6;
+  --radius:    6px;
+  --nav-h:     52px;
+  --sidebar-w: 240px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+  background: var(--bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Navigation ─────────────────────────────────────────── */
+
+.topnav {
+  background: var(--navy);
+  height: var(--nav-h);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  border-bottom: 1px solid rgba(255,255,255,.2);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  flex-shrink: 0;
+}
+.nav-brand a { text-decoration: none; }
+.nav-logo,
+.topnav-logo {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+.nav-title {
+  color: rgba(255,255,255,.9);
+  font-size: .9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.nav-title:hover { color: #fff; text-decoration: underline; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.nav-links a {
+  color: rgba(255,255,255,.82);
+  text-decoration: none;
+  font-size: .875rem;
+  font-weight: 500;
+  transition: color .15s;
+}
+.nav-links a:hover { color: #fff; text-decoration: underline; }
+
+/* ── Layout: Sidebar + Content ──────────────────────────── */
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--bg-alt);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  overflow-y: auto;
+}
+
+.sidebar-nav {
+  padding: .75rem 0 2rem;
+}
+.sidebar-home {
+  display: block;
+  padding: .45rem 1.1rem .45rem 1.1rem;
+  font-size: .78rem;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: .25rem;
+}
+.sidebar-home:hover { color: var(--blue); }
+#sidebar-toc:empty { display: none; }
+#sidebar-toc-label[hidden] { display: none; }
+
+/* ── Sidebar: collapsible groups ──────────────────────────── */
+.sidebar-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .3rem 1.1rem;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  color: var(--muted);
+  text-transform: uppercase;
+  text-align: left;
+}
+.sidebar-toggle:hover { color: var(--blue); }
+.sidebar-toggle .chevron { font-size: .65rem; flex-shrink: 0; }
+.sidebar-group-list,
+.sidebar-subgroup-list { list-style: none; padding: 0; margin: 0 0 .25rem; }
+.sidebar-subgroup-list { padding-left: .5rem; }
+.sidebar-group-list > li > .sidebar-toggle {
+  font-size: .68rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  padding: .3rem 1.1rem .3rem 1.5rem;
+}
+.chapter-sub-pages {
+  list-style: none;
+  padding: 0 0 .2rem 1.5rem;
+  margin: 0;
+}
+.chapter-sub-pages a {
+  font-size: .73rem;
+  color: var(--muted);
+  text-decoration: none;
+  display: block;
+  padding: .15rem 0;
+}
+.chapter-sub-pages a:hover,
+.chapter-sub-pages a.active { color: var(--blue); }
+
+.sidebar-section-label {
+  padding: 1rem 1.1rem .3rem;
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  color: var(--muted);
+}
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 .25rem;
+}
+.sidebar-nav li a {
+  display: block;
+  padding: .32rem 1.1rem;
+  font-size: .82rem;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.4;
+  transition: background .12s, color .12s;
+  border-left: 3px solid transparent;
+}
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active {
+  background: var(--blue-bg);
+  color: var(--blue);
+  border-left-color: var(--blue);
+  font-weight: 700;
+}
+
+/* ── Sidebar: active chapter sub-sections ────────────────── */
+
+.sidebar-sub {
+  list-style: none;
+  padding: .15rem 0 .3rem 0 !important;
+  margin: 0;
+}
+.sidebar-sub li { margin: 0; }
+.sidebar-sub > li > a {
+  padding-left: 1.8rem !important;
+  font-size: .78rem !important;
+  color: var(--muted) !important;
+  border-left: 3px solid transparent;
+}
+.sidebar-sub > li > a:hover,
+.sidebar-sub > li > a.active {
+  color: var(--blue) !important;
+  background: var(--blue-bg) !important;
+  border-left-color: var(--blue) !important;
+}
+/* Second level (###) */
+.sidebar-sub ul {
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+.sidebar-sub ul li a {
+  padding-left: 2.5rem !important;
+  font-size: .74rem !important;
+  color: var(--muted) !important;
+}
+.sidebar-sub ul li a:hover {
+  color: var(--blue) !important;
+  background: var(--blue-bg) !important;
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+
+.content {
+  flex: 1;
+  min-width: 0;
+  max-width: 940px;
+  padding: 2.5rem 2.5rem 4rem;
+}
+.content--home {
+  max-width: none;
+}
+
+/* ── Pandoc-TOC ──────────────────────────────────────────── */
+
+nav#TOC, div#TOC {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.5rem;
+  margin-bottom: 2.5rem;
+  font-size: .875rem;
+}
+nav#TOC::before, div#TOC::before {
+  content: "Auf dieser Seite";
+  font-weight: 700;
+  display: block;
+  margin-bottom: .6rem;
+  font-size: .85rem;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+#TOC ul { padding-left: 0; list-style: none; }
+#TOC ul ul { padding-left: 1.1rem; }
+#TOC li { margin: .18rem 0; }
+#TOC a { color: var(--blue); text-decoration: none; }
+#TOC a:hover { text-decoration: underline; }
+
+/* ── Typografie ─────────────────────────────────────────── */
+
+h1 {
+  font-size: 1.9rem; font-weight: 700;
+  margin: 0 0 1.5rem; line-height: 1.25;
+  color: var(--navy);
+}
+h2 {
+  font-size: 1.4rem; font-weight: 600;
+  margin: 2.5rem 0 .9rem;
+  padding-bottom: .35rem;
+  border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.1rem; font-weight: 600; margin: 2rem 0 .55rem; }
+h4 { font-size: .975rem; font-weight: 600; margin: 1.5rem 0 .4rem; }
+h4 .header-section-number,
+h5 .header-section-number,
+h6 .header-section-number { display: none; }
+
+p   { margin: 0 0 1rem; }
+a   { color: var(--blue); }
+a:hover { text-decoration: underline; }
+
+ul, ol { padding-left: 1.75rem; margin: 0 0 1rem; }
+li { margin: .2rem 0; }
+
+blockquote {
+  border-left: 3px solid var(--border);
+  margin: 1.5rem 0;
+  padding: .7rem 1.25rem;
+  color: var(--muted);
+  background: var(--bg-alt);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+/* ── Code ───────────────────────────────────────────────── */
+
+code {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: .15em .4em;
+  font-size: .875em;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+}
+pre {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  margin: 0 0 1.5rem;
+}
+pre code { background: none; border: none; padding: 0; }
+
+/* ── Tabellen ───────────────────────────────────────────── */
+
+table {
+  width: 100%;
+  table-layout: auto;     /* Browser passt Breiten an Inhalt an */
+  border-collapse: collapse;
+  margin: 0 0 1.5rem;
+  font-size: .88em;
+  display: block;
+  overflow-x: auto;
+}
+th {
+  background: var(--navy);
+  color: #fff;
+  font-weight: 600;
+  padding: .6rem .9rem;
+  text-align: left;
+  white-space: nowrap;    /* Header-Text liefert Browser Minimalbreiten-Hinweis */
+}
+td {
+  padding: .55rem .9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  min-width: 4rem;        /* verhindert erdrückte Spalten bei vielen Spalten */
+}
+tr:nth-child(even) td { background: var(--bg-alt); }
+tr:hover td { background: var(--blue-bg); }
+
+/* Erste Spalte (ID, Kürzel, Begriff) so schmal wie ihr Inhalt */
+table th:first-child,
+table td:first-child {
+  width: 1%;
+  white-space: nowrap;
+}
+/* Letzte Spalte bekommt möglichst viel Restbreite (Beschreibungen, Massnahmen) */
+table td:last-child {
+  width: auto;
+}
+
+/* Lange Pfade / Code-Strings in Tabellenzellen umbrechen statt die Spalte aufzudehnen */
+td code {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* ── Bilder ─────────────────────────────────────────────── */
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+  margin: 1.5rem auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+figure { margin: 1.5rem 0; }
+figcaption {
+  text-align: center;
+  font-size: .85rem;
+  color: var(--muted);
+  margin-top: .5rem;
+}
+
+/* Bilder im Content-Bereich sind klickbar */
+main img, .content img {
+  cursor: zoom-in;
+}
+
+/* Vollbild-Link unter jedem Bild */
+.img-link {
+  text-align: right;
+  margin: .4rem 0 1.5rem;
+  font-size: .8rem;
+}
+.img-link a {
+  color: var(--blue);
+  text-decoration: none;
+  padding: .2rem .6rem;
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  transition: background .15s, color .15s;
+}
+.img-link a:hover {
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Bildquelle-Link unter Bildern (öffnet extern; kein Lightbox-Klick) */
+.img-source {
+  text-align: left;
+  margin: -.5rem 0 1.5rem;
+  font-size: .75rem;
+}
+.img-source a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.img-source a:hover {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
+/* ── Hero (index.html) ──────────────────────────────────── */
+
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+  color: #fff;
+  margin: -2.5rem -2.5rem 2.5rem;   /* bündig mit .content-Padding */
+  padding: 4rem 2.5rem;
+  text-align: center;
+}
+.hero-content { max-width: 560px; margin: 0 auto; }
+
+.hero-logo {
+  width: 64px; height: 64px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.15);
+  border: 2px solid rgba(255,255,255,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 800;
+  margin: 0 auto 1.25rem;
+}
+.hero h1 {
+  font-size: 2.5rem; font-weight: 800;
+  margin: 0 0 .2rem; color: #fff; border: none;
+}
+.hero h2 {
+  font-size: 1.2rem; font-weight: 400;
+  margin: 0 0 .6rem;
+  color: rgba(255,255,255,.72); border: none;
+}
+.hero-subtitle {
+  color: rgba(255,255,255,.62);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: .9rem;
+}
+.hero-actions {
+  display: flex; gap: 1rem;
+  justify-content: center; flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .7rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: .9rem; font-weight: 600;
+  text-decoration: none;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,.2); text-decoration: none; }
+.btn-primary   { background: #fff; color: var(--navy); }
+.btn-secondary {
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 2px solid rgba(255,255,255,.35);
+}
+.btn-secondary:hover { background: rgba(255,255,255,.22); }
+
+/* ── API Badge (domain list in TOC) ─────────────────────── */
+
+.api-badge {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 600;
+  padding: .08rem .5rem;
+  margin-left: .5rem;
+  background: var(--blue-bg);
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  text-decoration: none;
+  vertical-align: middle;
+  transition: background .15s, color .15s;
+}
+.api-badge:hover {
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ── TOC-Seite (toc.html) ───────────────────────────────── */
+
+.toc-page h1  { font-size: 1.6rem; margin-bottom: 1.75rem; }
+.toc-page h2  {
+  font-size: .7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--muted);
+  margin: 2rem 0 .5rem; border: none;
+}
+.toc-page ul  { list-style: none; padding: 0; margin: 0 0 .5rem; }
+.toc-page li  {
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: .45rem .4rem;
+  transition: background .12s;
+}
+.toc-page li:hover {
+  background: var(--blue-bg);
+}
+.toc-page li > a:first-child {
+  flex: 1;
+  color: var(--text);
+  text-decoration: none;
+  font-size: .92rem;
+  transition: color .12s;
+}
+.toc-page li:hover > a:first-child {
+  color: var(--blue);
+}
+.toc-page li > .api-badge {
+  flex-shrink: 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .content { padding: 1.5rem 1.25rem 3rem; }
+  h1 { font-size: 1.55rem; }
+  h2 { font-size: 1.2rem; }
+  .hero { margin: -1.5rem -1.25rem 2rem; padding: 3rem 1.5rem; }
+  .hero h1 { font-size: 1.9rem; }
+  table { font-size: .82em; }
+  .nav-title { display: none; }
+}
+
+/* ── Chapter cards (index page) ─────────────────────────────── */
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.chapter-card {
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: white;
+  transition: box-shadow .15s, transform .15s;
+}
+.chapter-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  transform: translateY(-2px);
+}
+.card-num {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--blue, #1d4ed8);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 0.4rem;
+}
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+}
+
+/* ── Breadcrumb ─────────────────────────────────────────────── */
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.breadcrumb a { color: var(--blue, #1d4ed8); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+/* ── Search bar ─────────────────────────────────────────────── */
+.search-input {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  width: 200px;
+  background: white;
+}
+.search-results {
+  position: absolute;
+  top: 52px;
+  right: 16px;
+  width: 360px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  z-index: 300;
+  padding: 8px 0;
+}
+.search-result-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: #f1f5f9; }
+.search-result-item a { text-decoration: none; color: inherit; display: block; }
+.search-result-title   { font-weight: 600; font-size: 0.9rem; color: #1e293b; }
+.search-result-excerpt { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+
+/* ── Site footer ─────────────────────────────────────────────── */
+.site-footer {
+  margin-top: 3rem;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── Lightbox (Vollbild overlay) ─────────────────────────────── */
+#cp-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, .82);
+  overflow: auto;        /* backdrop scrolls for images larger than viewport */
+  display: flex;
+  cursor: zoom-out;
+  padding: 1rem;
+}
+#cp-lightbox .cp-lb-inner {
+  cursor: default;
+  background: #fff;
+  border-radius: 4px;
+  line-height: 0;        /* remove extra space below inline img */
+  margin: auto;          /* centers when smaller than viewport */
+}
+#cp-lightbox img {
+  display: block;
+  max-width: none; /* override global img { max-width: 100% } */
+}
+
+/* ── Topnav-Brandmark (Projekt-Initialen statt Logo-PNG) ────────────────── */
+.topnav-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 32px;
+  padding: 0 .5rem;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  font-weight: 700;
+  font-size: .85rem;
+  letter-spacing: .04em;
+  border-radius: 4px;
+}

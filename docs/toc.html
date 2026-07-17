@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inhaltsverzeichnis – e-gov-framework</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+  <main class="content toc-page">
+    <h1>Inhaltsverzeichnis</h1>
+    <h2>ARC42 Kapitel</h2>
+    <ul>
+      <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+      <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+      <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+      <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+      <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+      <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+      <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+      <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+      <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+      <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+      <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+      <li><a href="12_Glossary.html">12. Glossar</a></li>
+    </ul>
+  </main>
+</div>
+<script src="sidebar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

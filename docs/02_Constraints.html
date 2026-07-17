@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>2. Randbedingungen</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#randbedingungen" id="toc-randbedingungen"><span
+class="toc-section-number">2</span> Randbedingungen</a>
+<ul>
+<li><a href="#technische-randbedingungen"
+id="toc-technische-randbedingungen"><span
+class="toc-section-number">2.1</span> Technische
+Randbedingungen</a></li>
+<li><a href="#organisatorische-randbedingungen"
+id="toc-organisatorische-randbedingungen"><span
+class="toc-section-number">2.2</span> Organisatorische
+Randbedingungen</a></li>
+<li><a href="#konventionen" id="toc-konventionen"><span
+class="toc-section-number">2.3</span> Konventionen</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="2" id="randbedingungen"><span
+class="header-section-number">2</span> Randbedingungen</h1>
+<h2 data-number="2.1" id="technische-randbedingungen"><span
+class="header-section-number">2.1</span> Technische Randbedingungen</h2>
+<table>
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Randbedingung</th>
+<th>Erläuterung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Java 21</strong></td>
+<td>LTS-Version; Pflicht für alle Framework-Module und consuming
+Applications</td>
+</tr>
+<tr>
+<td><strong>Spring Boot 3.5</strong></td>
+<td>Basis-Framework; alle Auto-Konfigurationen setzen Spring Boot 3.x
+voraus</td>
+</tr>
+<tr>
+<td><strong>Maven</strong></td>
+<td>Build-Tool; Framework wird als Maven-BOM + einzelne JARs via
+Artifactory distribuiert</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL oder SQL Server</strong></td>
+<td>Zwei unterstützte Datenbanktypen; PostgreSQL empfohlen, SQL Server
+für Kunden mit Microsoft-Vorgaben</td>
+</tr>
+<tr>
+<td><strong>Flyway</strong></td>
+<td>Datenbank-Migrationen; Framework liefert eigene Flyway-Skripte;
+Applikationen ergänzen eigene</td>
+</tr>
+<tr>
+<td><strong>Kubernetes (On-Premise)</strong></td>
+<td>Deployment-Plattform aller produktiven Installationen. Ausnahme: Das
+optionale Modul <code>e-gov-ai-rule-generation</code> kommuniziert mit
+Azure OpenAI (Cloud-Egress erforderlich); Behörden, die dieses Modul
+einsetzen, benötigen eine entsprechende Netzwerk-Freigabe (→
+ADR-007)</td>
+</tr>
+<tr>
+<td><strong>Docker</strong></td>
+<td>Container-Laufzeitumgebung; lokale Entwicklung via docker-compose
+(PostgreSQL, SQL Server)</td>
+</tr>
+<tr>
+<td><strong>Azure AD + F5</strong></td>
+<td>Vorgelagertes Identity-System; Framework erhält <code>userId</code>
+via <code>EGOV_TOKEN</code>-Cookie, führt selbst keine Authentication
+durch</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="2.2" id="organisatorische-randbedingungen"><span
+class="header-section-number">2.2</span> Organisatorische
+Randbedingungen</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 87%" />
+</colgroup>
+<thead>
+<tr>
+<th>Randbedingung</th>
+<th>Erläuterung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entwicklung durch ti&amp;m AG</strong></td>
+<td>Das Framework ist ein internes ti&amp;m-Produkt; Issues und Releases
+werden intern gesteuert</td>
+</tr>
+<tr>
+<td><strong>Hosting durch Kundenwahl</strong></td>
+<td>Jede Behörde wählt ihren eigenen Hosting-Provider; das Framework
+muss auf beliebigen On-Premise-Kubernetes-Clustern betreibbar sein. Das
+optionale KI-Modul setzt zusätzlich Azure-OpenAI-Konnektivität voraus
+und ist daher nur für Behörden mit entsprechender Cloud-Freigabe
+geeignet (→ ADR-007)</td>
+</tr>
+<tr>
+<td><strong>Semantic Versioning</strong></td>
+<td>Releases folgen SemVer via Conventional Commits; CHANGELOG wird
+automatisch generiert</td>
+</tr>
+<tr>
+<td><strong>ArgoCD für Deployments</strong></td>
+<td>Applikationen werden über GitOps-Workflows (ArgoCD) auf Kubernetes
+ausgerollt</td>
+</tr>
+<tr>
+<td><strong>Mehrere aktive Produktivsysteme</strong></td>
+<td>Bei Kunden der ti&amp;m; Breaking Changes erfordern koordinierte
+Migrationen</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="2.3" id="konventionen"><span
+class="header-section-number">2.3</span> Konventionen</h2>
+<table>
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Konvention</th>
+<th>Erläuterung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conventional Commits</strong></td>
+<td>Commit-Messages nach <code>feat:</code>, <code>fix:</code>,
+<code>chore:</code>-Schema; steuert automatische Versionierung</td>
+</tr>
+<tr>
+<td><strong>Deutsch als Dokumentationssprache</strong></td>
+<td>Fachliche Konzepte und Kommentare auf Deutsch; Code auf
+Englisch</td>
+</tr>
+<tr>
+<td><strong><code>egov.*</code> Konfigurations-Präfix</strong></td>
+<td>Alle Framework-Properties gruppieren sich unter dem Namespace
+<code>egov.</code> in <code>application.yml</code></td>
+</tr>
+<tr>
+<td><strong><code>SNAKE_CASE</code> oder
+<code>CAMEL_CASE</code></strong></td>
+<td>Datenbankspaltennamen-Konvention ist pro Deployment konfigurierbar;
+Default: <code>CAMEL_CASE</code></td>
+</tr>
+<tr>
+<td><strong>OpenAPI via SpringDoc</strong></td>
+<td>Alle REST-Endpunkte werden automatisch über
+<code>/swagger-ui.html</code> dokumentiert</td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

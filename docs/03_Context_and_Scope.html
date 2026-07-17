@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3. Kontextabgrenzung</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#kontextabgrenzung" id="toc-kontextabgrenzung"><span
+class="toc-section-number">3</span> Kontextabgrenzung</a>
+<ul>
+<li><a href="#fachlicher-kontext" id="toc-fachlicher-kontext"><span
+class="toc-section-number">3.1</span> Fachlicher Kontext</a></li>
+<li><a href="#technischer-kontext" id="toc-technischer-kontext"><span
+class="toc-section-number">3.2</span> Technischer Kontext</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="3" id="kontextabgrenzung"><span
+class="header-section-number">3</span> Kontextabgrenzung</h1>
+<h2 data-number="3.1" id="fachlicher-kontext"><span
+class="header-section-number">3.1</span> Fachlicher Kontext</h2>
+<p>Das e-gov-framework selbst hat keine fachliche Benutzeroberfläche. Es
+ist eine Bibliothek, die von Fachapplikationen verwendet wird.</p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr>
+<th>Partner</th>
+<th>Eingehende Daten</th>
+<th>Ausgehende Daten</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sachbearbeiter (Behörde)</strong></td>
+<td>Formulardaten, Filter- und Suchanfragen, CRUD-Operationen</td>
+<td>Gefilterte Datenlisten (nur berechtigte Zeilen), Validierungsfehler,
+Statusmeldungen</td>
+</tr>
+<tr>
+<td><strong>Behörden-IAM (Azure AD + F5)</strong></td>
+<td><code>EGOV_TOKEN</code>-Cookie mit <code>userId</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Stammdaten-Konsumenten (MDM)</strong></td>
+<td>Abfragen auf Codelisten (Ortschaften, Sprachen, Anreden etc.)</td>
+<td>Mehrsprachige Code-Listen</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="images/03_Context/fachlicher-kontext.Fachlicher%20Kontext.svg"
+alt="Fachlicher Kontext" />
+<figcaption aria-hidden="true">Fachlicher Kontext</figcaption>
+</figure>
+<p class="img-link"><a href="images/03_Context/fachlicher-kontext.Fachlicher%20Kontext.svg" target="_blank" rel="noopener">↗ Vollbild</a></p>
+<p class="img-source"><a href="images/03_Context/fachlicher-kontext.Fachlicher%20Kontext.svg" target="_blank" rel="noopener">Bildquelle Fachlicher Kontext (SVG)</a></p><h2 data-number="3.2" id="technischer-kontext"><span
+class="header-section-number">3.2</span> Technischer Kontext</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 23%" />
+<col style="width: 21%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Schnittstelle</th>
+<th>Protokoll</th>
+<th>Richtung</th>
+<th>Bemerkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Azure AD + F5 Firewall</strong></td>
+<td>HTTPS / Cookie</td>
+<td>→ Framework</td>
+<td>Setzt <code>EGOV_TOKEN</code>-Cookie nach Login; Framework
+extrahiert <code>userId</code> über
+<code>UserIdProvider</code>-Interface</td>
+</tr>
+<tr>
+<td><strong>PostgreSQL</strong></td>
+<td>JDBC</td>
+<td>↔︎</td>
+<td>Primäre Produktionsdatenbank; Framework liefert
+Flyway-DDL-Skripte</td>
+</tr>
+<tr>
+<td><strong>SQL Server</strong></td>
+<td>JDBC</td>
+<td>↔︎</td>
+<td>Alternative für Kunden mit Microsoft-Stack</td>
+</tr>
+<tr>
+<td><strong>ZooKeeper</strong></td>
+<td>TCP (Port 2181)</td>
+<td>↔︎</td>
+<td>Optional; für verteilte Command-Ausführung über mehrere Instanzen;
+via Apache Curator</td>
+</tr>
+<tr>
+<td><strong>Azure OpenAI (gpt-4o)</strong></td>
+<td>HTTPS / REST</td>
+<td>→</td>
+<td>Nur <code>e-gov-ai-rule-generation</code>-Modul; generiert
+Validierungsregeln aus natürlicher Sprache</td>
+</tr>
+<tr>
+<td><strong>Artifactory (bin.ti8m.ch)</strong></td>
+<td>HTTPS / Maven</td>
+<td>←</td>
+<td>Framework-JARs werden von consuming Apps via Maven bezogen</td>
+</tr>
+<tr>
+<td><strong>ArgoCD</strong></td>
+<td>Kubernetes API</td>
+<td>→</td>
+<td>Deployment-Steuerung der consuming Apps; kein direkter
+Framework-Kontakt</td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

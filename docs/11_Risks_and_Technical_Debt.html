@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>11. Risiken und technische Schulden</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#risiken-und-technische-schulden"
+id="toc-risiken-und-technische-schulden"><span
+class="toc-section-number">11</span> Risiken und technische Schulden</a>
+<ul>
+<li><a href="#risiken" id="toc-risiken"><span
+class="toc-section-number">11.1</span> Risiken</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="11" id="risiken-und-technische-schulden"><span
+class="header-section-number">11</span> Risiken und technische
+Schulden</h1>
+<p>Bekannte technische Risiken und Schulden — geordnet nach
+Eintrittswahrscheinlichkeit und Auswirkung.</p>
+<h2 data-number="11.1" id="risiken"><span
+class="header-section-number">11.1</span> Risiken</h2>
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 13%" />
+<col style="width: 36%" />
+<col style="width: 22%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Risiko</th>
+<th>Wahrscheinlichkeit</th>
+<th>Auswirkung</th>
+<th>Massnahme</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-1</td>
+<td><strong>Performance-Engpass: Stack Overflow bei grossen
+IN-Filter-Ausdrücken</strong> — <code>Tokenizer.java</code> wirft bei
+IN-Conditions mit ca. 1300+ Werten einen Stack Overflow</td>
+<td>mittel</td>
+<td>hoch</td>
+<td>Pagination oder serverseitige Limit-Prüfung vor der
+Query-Verarbeitung einführen; bekannte Schwelle dokumentieren</td>
+</tr>
+<tr>
+<td>R-2</td>
+<td><strong>Transaktionsverwaltung ausserhalb Spring Boot</strong> —
+Teile des Frameworks verwalten Transaktionen eigenständig, ohne
+Spring-Transaktionsmechanismen zu nutzen; Verhalten bei Rollback, Nested
+Transactions und AOP-Proxying ist fehleranfällig; betrifft
+Qualitätsziele QS-05 (Audit-Trail) und QS-06 (Pod-Failover)</td>
+<td>hoch</td>
+<td>hoch</td>
+<td>Mit Framework 2.0 vollständige Spring-Transaktionsintegration
+einführen (in Umsetzung)</td>
+</tr>
+<tr>
+<td>R-3</td>
+<td><strong>Key-Person-Dependency</strong> — Kernwissen über
+Framework-Internals (Persistenz-Abstraktion, ZooKeeper-Integration,
+AI-Modul) konzentriert sich</td>
+<td>mittel</td>
+<td>hoch</td>
+<td>Wissenstransfer und Pair-Programming forcieren; kritische
+Designentscheidungen in ADRs (Sektion 9) dokumentieren</td>
+</tr>
+<tr>
+<td>R-4</td>
+<td><strong>Spring AI Milestone-Release</strong> — Dependency
+<code>spring-ai 1.0.0-M6</code> ist kein stabiles Release;
+API-Breaking-Changes zwischen Milestones möglich</td>
+<td>mittel</td>
+<td>mittel</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

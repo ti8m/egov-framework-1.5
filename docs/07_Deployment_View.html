@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>7. Verteilungssicht</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#verteilungssicht" id="toc-verteilungssicht"><span
+class="toc-section-number">7</span> Verteilungssicht</a>
+<ul>
+<li><a href="#motivation" id="toc-motivation"><span
+class="toc-section-number">7.1</span> Motivation</a></li>
+<li><a href="#infrastruktur-ebene-1"
+id="toc-infrastruktur-ebene-1"><span
+class="toc-section-number">7.2</span> Infrastruktur Ebene 1</a>
+<ul>
+<li><a href="#software-infrastruktur-zuordnung"
+id="toc-software-infrastruktur-zuordnung"><span
+class="toc-section-number">7.2.1</span>
+Software-Infrastruktur-Zuordnung</a></li>
+</ul></li>
+<li><a href="#sicherheitszonen" id="toc-sicherheitszonen"><span
+class="toc-section-number">7.3</span> Sicherheitszonen</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="7" id="verteilungssicht"><span
+class="header-section-number">7</span> Verteilungssicht</h1>
+<h2 data-number="7.1" id="motivation"><span
+class="header-section-number">7.1</span> Motivation</h2>
+<p>Das e-gov-framework wird vollständig On-Premise auf kundeneigenen
+Kubernetes-Clustern betrieben. Diese Entscheidung folgt aus behördlichen
+Anforderungen an Datensouveränität, Compliance und Netzwerkisolation.
+Alle Kernmodule benötigen ausschliesslich Infrastruktur innerhalb des
+Clusters (→ Randbedingungen Sektion 2). Das optionale KI-Modul
+<code>e-gov-ai-rule-generation</code> bildet die einzige Ausnahme: Es
+kommuniziert mit Azure OpenAI über HTTPS und erfordert daher eine
+explizite Netzwerk-Freigabe durch die Behörde (→ ADR-007).</p>
+<h2 data-number="7.2" id="infrastruktur-ebene-1"><span
+class="header-section-number">7.2</span> Infrastruktur Ebene 1</h2>
+<p>Typische Produktivumgebung einer Behörde:</p>
+<figure>
+<img
+src="images/07_Deployment/infrastruktur.Infrastruktur%20Verteilungssicht.svg"
+alt="Infrastruktur Verteilungssicht" />
+<figcaption aria-hidden="true">Infrastruktur
+Verteilungssicht</figcaption>
+</figure>
+<p class="img-link"><a href="images/07_Deployment/infrastruktur.Infrastruktur%20Verteilungssicht.svg" target="_blank" rel="noopener">↗ Vollbild</a></p>
+<p class="img-source"><a href="images/07_Deployment/infrastruktur.Infrastruktur%20Verteilungssicht.svg" target="_blank" rel="noopener">Bildquelle Infrastruktur Verteilungssicht (SVG)</a></p><table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 25%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr>
+<th>Knoten</th>
+<th>Rolle</th>
+<th>Technologie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kubernetes-Cluster</strong></td>
+<td>Laufzeitumgebung für alle Applikations-Pods</td>
+<td>Kubernetes On-Premise; Anbieter durch Behörde gewählt</td>
+</tr>
+<tr>
+<td><strong>Fachapplikations-Pod</strong></td>
+<td>Laufzeitumgebung der consuming App (Framework eingebettet als
+JAR)</td>
+<td>Docker-Container, Java 21, Spring Boot</td>
+</tr>
+<tr>
+<td><strong>Datenbank-Server</strong></td>
+<td>Persistenz für Framework- und Domänentabellen</td>
+<td>PostgreSQL oder SQL Server</td>
+</tr>
+<tr>
+<td><strong>ZooKeeper</strong> (optional)</td>
+<td>Verteilte Service Discovery für Multi-Instanz-Deployments</td>
+<td>Apache ZooKeeper 3.x</td>
+</tr>
+<tr>
+<td><strong>F5-Firewall / Reverse Proxy</strong></td>
+<td>TLS-Terminierung, Cookie-Setzen (<code>EGOV_TOKEN</code>) nach
+Login</td>
+<td>F5 BIG-IP</td>
+</tr>
+<tr>
+<td><strong>Azure AD</strong></td>
+<td>Identity Provider, Authentication</td>
+<td>Microsoft Azure AD (extern)</td>
+</tr>
+<tr>
+<td><strong>ArgoCD</strong></td>
+<td>GitOps-Deployment-Steuerung</td>
+<td>ArgoCD auf demselben oder separatem Cluster</td>
+</tr>
+<tr>
+<td><strong>Artifactory (ti&amp;m)</strong></td>
+<td>Maven-Repository für Framework-JARs</td>
+<td>bin.ti8m.ch (ti8m-betrieben)</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="7.2.1" id="software-infrastruktur-zuordnung"><span
+class="header-section-number">7.2.1</span>
+Software-Infrastruktur-Zuordnung</h3>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 34%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr>
+<th>Framework-Modul</th>
+<th>Laufzeitknoten</th>
+<th>Netzwerk-Zone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>e-gov-framework</strong> (Kern)</td>
+<td>Fachapplikations-Pod</td>
+<td>Cluster-intern</td>
+</tr>
+<tr>
+<td><strong>e-gov-mdm</strong></td>
+<td>Fachapplikations-Pod</td>
+<td>Cluster-intern</td>
+</tr>
+<tr>
+<td><strong>e-gov-mdm-api</strong></td>
+<td>Fachapplikations-Pod</td>
+<td>Cluster-intern</td>
+</tr>
+<tr>
+<td><strong>e-gov-luid</strong></td>
+<td>Fachapplikations-Pod</td>
+<td>Cluster-intern</td>
+</tr>
+<tr>
+<td><strong>e-gov-bom</strong></td>
+<td>Build-Zeit (kein Laufzeittartefakt)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>e-gov-framework-demo</strong></td>
+<td>DEV/INT-Umgebung (nicht Produktion)</td>
+<td>Cluster-intern</td>
+</tr>
+<tr>
+<td><strong>e-gov-ai-rule-generation</strong></td>
+<td>Fachapplikations-Pod</td>
+<td>Cluster-intern + Cloud-Egress (Azure OpenAI)</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="7.3" id="sicherheitszonen"><span
+class="header-section-number">7.3</span> Sicherheitszonen</h2>
+<pre><code>┌──────────────────────────────── Behörden-Netzwerk ─────────────────────────────────┐
+│  ┌─── Internet-Zone ───┐    ┌──────────── Cluster-Zone (On-Premise) ─────────────┐ │
+│  │  Sachbearbeiter     │    │  F5 → Fachapplikations-Pod (Framework + Module)    │ │
+│  │  Browser → HTTPS    │───▶│  Pod ──▶ Datenbank (PostgreSQL / SQL Server)       │ │
+│  └─────────────────────┘    │  Pod ──▶ ZooKeeper (optional)                      │ │
+│                              └────────────────────────────────────────────────────┘ │
+│  ┌─ Azure AD (extern) ─┐    ┌──── Cloud-Egress (nur KI-Modul, optional) ─────────┐ │
+│  │  Identity Provider  │    │  e-gov-ai-rule-generation → Azure OpenAI (HTTPS)   │ │
+│  └─────────────────────┘    └────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<p><strong>Sicherheitszonen:</strong> - <strong>Internet-Zone:</strong>
+Eingehender HTTPS-Traffic der Sachbearbeiter; TLS-Terminierung durch die
+F5-Firewall; <code>EGOV_TOKEN</code>-Cookie wird gesetzt -
+<strong>Cluster-Zone (On-Premise):</strong> Alle Framework-Kernmodule
+und Datenbankserver; kein direkter Internetzugang; Kommunikation nur
+Pod-zu-Pod und Pod-zu-DB - <strong>Cloud-Egress (optional):</strong>
+Ausschliesslich <code>e-gov-ai-rule-generation</code>; erfordert
+explizite Firewall-Freigabe durch die Behörde (→ ADR-007)</p>
+  </main><!-- .content -->
+</div><!-- .layout -->
+
+<script src="sidebar.js"></script>
+
+<footer class="site-footer">
+  Generiert am 2026-07-07
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>

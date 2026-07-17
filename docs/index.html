@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>e-gov-framework</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topnav">
+  <a class="logo-link" href="index.html">
+    <span class="topnav-brand-mark">ti&m</span>
+  </a>
+  <a class="site-title" href="index.html">e-gov-framework</a>
+  <div class="nav-links">
+    <input class="search-input" type="search" placeholder="Suchen…" id="search-input" autocomplete="off">
+    <div class="search-results" id="search-results" hidden></div>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a class="sidebar-home" href="toc.html">☰ Inhaltsverzeichnis</a>
+      <button class="sidebar-toggle" data-target="arc42-list" aria-expanded="false">ARC42 <span class="chevron">▸</span></button>
+      <ul id="arc42-list" class="sidebar-group-list" hidden>
+        <li><a href="01_Introduction_and_Goals.html">1. Einführung und Ziele</a></li>
+        <li><a href="02_Constraints.html">2. Randbedingungen</a></li>
+        <li><a href="03_Context_and_Scope.html">3. Kontextabgrenzung</a></li>
+        <li><a href="04_Solution_Strategy.html">4. Lösungsstrategie</a></li>
+        <li><a href="05_Building_Block_View.html">5. Bausteinsicht</a></li>
+        <li><a href="06_Runtime_View.html">6. Laufzeitsicht</a></li>
+        <li><a href="07_Deployment_View.html">7. Verteilungssicht</a></li>
+        <li><a href="08_Crosscutting_Concepts.html">8. Querschnittliche Konzepte</a></li>
+        <li><a href="09_Architectural_Decisions.html">9. Architekturentscheidungen</a></li>
+        <li><a href="10_Quality_Requirements.html">10. Qualitätsanforderungen</a></li>
+        <li><a href="11_Risks_and_Technical_Debt.html">11. Risiken und technische Schulden</a></li>
+        <li><a href="12_Glossary.html">12. Glossar</a></li>
+      </ul>
+      <div class="sidebar-section-label" id="sidebar-toc-label" hidden>Auf dieser Seite</div>
+      <div id="sidebar-toc"></div>
+    </nav>
+  </aside>
+  <main class="content">
+  <main class="content content--home">
+    <div class="hero">
+      <div class="hero-logo">ti&m</div>
+      <h1>e-gov-framework</h1>
+      <h2>ARC42 Architekturdokumentation</h2>
+      <p class="hero-subtitle">ARC42 Architekturdokumentation</p>
+      <div class="hero-actions">
+        <a href="e_gov_framework_Systemarchitektur.pdf" class="btn btn-primary">PDF herunterladen</a>
+        <a href="e_gov_framework_Systemarchitektur.docx" class="btn btn-secondary">DOCX herunterladen</a>
+        <a href="toc.html" class="btn btn-secondary">HTML-Version</a>
+      </div>
+    </div>
+    <h2>Kapitelübersicht</h2>
+    <div class="chapter-grid">
+        <a href="01_Introduction_and_Goals.html" class="chapter-card">
+          <div class="card-num">Kapitel 1</div>
+          <div class="card-title">Einführung und Ziele</div>
+        </a>
+        <a href="02_Constraints.html" class="chapter-card">
+          <div class="card-num">Kapitel 2</div>
+          <div class="card-title">Randbedingungen</div>
+        </a>
+        <a href="03_Context_and_Scope.html" class="chapter-card">
+          <div class="card-num">Kapitel 3</div>
+          <div class="card-title">Kontextabgrenzung</div>
+        </a>
+        <a href="04_Solution_Strategy.html" class="chapter-card">
+          <div class="card-num">Kapitel 4</div>
+          <div class="card-title">Lösungsstrategie</div>
+        </a>
+        <a href="05_Building_Block_View.html" class="chapter-card">
+          <div class="card-num">Kapitel 5</div>
+          <div class="card-title">Bausteinsicht</div>
+        </a>
+        <a href="06_Runtime_View.html" class="chapter-card">
+          <div class="card-num">Kapitel 6</div>
+          <div class="card-title">Laufzeitsicht</div>
+        </a>
+        <a href="07_Deployment_View.html" class="chapter-card">
+          <div class="card-num">Kapitel 7</div>
+          <div class="card-title">Verteilungssicht</div>
+        </a>
+        <a href="08_Crosscutting_Concepts.html" class="chapter-card">
+          <div class="card-num">Kapitel 8</div>
+          <div class="card-title">Querschnittliche Konzepte</div>
+        </a>
+        <a href="09_Architectural_Decisions.html" class="chapter-card">
+          <div class="card-num">Kapitel 9</div>
+          <div class="card-title">Architekturentscheidungen</div>
+        </a>
+        <a href="10_Quality_Requirements.html" class="chapter-card">
+          <div class="card-num">Kapitel 10</div>
+          <div class="card-title">Qualitätsanforderungen</div>
+        </a>
+        <a href="11_Risks_and_Technical_Debt.html" class="chapter-card">
+          <div class="card-num">Kapitel 11</div>
+          <div class="card-title">Risiken und technische Schulden</div>
+        </a>
+        <a href="12_Glossary.html" class="chapter-card">
+          <div class="card-num">Kapitel 12</div>
+          <div class="card-title">Glossar</div>
+        </a>
+    </div>
+  </main>
+</div>
+<script src="sidebar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="search.js"></script>
+</body>
+</html>
